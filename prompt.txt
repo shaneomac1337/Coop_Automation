@@ -10,13 +10,13 @@ For this customer, we will have the basee import file from the Structure install
 But similarily as we did for the GKStores we will have to modify the WDM configuration.
 
 that's the similar operation as this:
-
-				
-				
+<change file="printers.xml" url="printers.printerAdapterList.printerAdapter.adapterAddress" value="pvwps04876-001.s04876.asda.uk:8443"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter.uniqueName" value="CS735-001-4876"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter.barcode" value="CS735-001-4876.S04876.asda.uk"/>
 
 In our case we will be changing the wall configs for wdm
 wall-config.walls.1.clientId= there will be an ip address
-there will be maximum of 
+there will be maximum of 4 walls
 wall-config.walls.1.clientId={ip_address}
 wall-config.walls.2.clientId={ip_address}
 wall-config.walls.3.clientId={ip_address}
