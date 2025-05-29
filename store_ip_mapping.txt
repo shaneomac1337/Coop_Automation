@@ -1,0 +1,9 @@
+# Store IP Mapping File
+# Format: StoreID:IPAddress
+# Example entries (replace with your actual store mappings):
+9999:192.168.26.213
+#1467:10.1.0.20
+
+# Add your store mappings below:
+# 1234:192.168.1.100
+# 5678:10.0.0.50

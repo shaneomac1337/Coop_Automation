@@ -1,7 +1,7 @@
 # Store Manager Configuration Import Automation Plan
 
 ## Overview
-This document outlines the detailed plan for automating the configuration import solution for the store manager application, specifically focusing on WDM (Wall Display Management) configurations.
+This document outlines the detailed plan for automating the configuration import solution for the store manager application, specifically focusing on WDM (Wall Display Management) configurations and Web-UI server configurations.
 
 ## Current Situation Analysis
 
@@ -16,6 +16,8 @@ This document outlines the detailed plan for automating the configuration import
 - Each wall gets unique IP address
 - Mandatory walls: 1 (dispense) and 100 (disposal)
 - Optional walls: 2, 3, etc.
+- Support web-ui-config.xml changes for server address configuration
+- Use simple store IP mapping for web-UI server addresses
 
 ## Implementation Plan
 
@@ -97,15 +99,34 @@ For each store, generate change elements targeting the CSE-wdm node:
 
 ```xml
 <node alias="CSE-wdm" country="SE" name="WDM" unique-name="9999.WDM">
-    <change file="wall-config.xml" url="wall-config.walls.wall[wallId='1'].clientId" value="192.168.99.101"/>
-    <change file="wall-config.xml" url="wall-config.walls.wall[wallId='2'].clientId" value="192.168.99.102"/>
-    <change file="wall-config.xml" url="wall-config.walls.wall[wallId='3'].clientId" value="192.168.99.103"/>
-    <change file="wall-config.xml" url="wall-config.walls.wall[wallId='100'].clientId" value="192.168.99.200"/>
+    <change file="wall-config.xml" url="wall-config.walls.1.clientId" value="192.168.99.101"/>
+    <change file="wall-config.xml" url="wall-config.walls.2.clientId" value="192.168.99.102"/>
+    <change file="wall-config.xml" url="wall-config.walls.3.clientId" value="192.168.99.103"/>
+    <change file="wall-config.xml" url="wall-config.walls.100.clientId" value="192.168.99.200"/>
+    <change file="web-ui-config.xml" url="webUiConfig.system.serverAddress" value="http://192.168.26.213:8080/app-wdm"/>
 </node>
 ```
 
-#### 3.2 XPath Pattern
-- Target: `wall-config.walls.wall[wallId='X'].clientId`
+#### 3.2 Web-UI Configuration Changes
+For each store with IP mapping, generate web-ui-config change elements:
+
+**Store IP Mapping File Format (`store_ip_mapping.txt`):**
+```
+# Store IP Mapping File
+# Format: StoreID:IPAddress
+9999:192.168.26.213
+1674:10.1.0.20
+1655:192.168.55.100
+```
+
+**Generated Web-UI Change:**
+```xml
+<change file="web-ui-config.xml" url="webUiConfig.system.serverAddress" value="http://192.168.26.213:8080/app-wdm"/>
+```
+
+#### 3.3 URL Patterns
+- Wall config: `wall-config.walls.X.clientId`
+- Web-UI config: `webUiConfig.system.serverAddress`
 - Similar to printer pattern: `printers.physicalPrinterList.physicalPrinter.uniqueName`
 
 ### Phase 4: File Structure Organization
@@ -113,9 +134,10 @@ For each store, generate change elements targeting the CSE-wdm node:
 ```
 automation/
 ├── config/
-│   └── store_wall_mapping.json
+│   ├── store_wall_mapping.json
+│   └── store_ip_mapping.txt
 ├── templates/
-│   ├── base_structure_template.xml
+│   ├── template.xml
 │   └── wall_config_template.xml
 ├── scripts/
 │   ├── generate_store_config.py
@@ -127,7 +149,8 @@ automation/
 │   └── generated_configs/
 │       ├── store_9999_config.xml
 │       ├── store_1674_config.xml
-│       └── store_1655_config.xml
+│       ├── store_1655_config.xml
+│       └── all_stores_config.xml
 └── docs/
     ├── configuration_guide.md
     └── usage_examples.md

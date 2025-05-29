@@ -26,11 +26,14 @@ class StoreConfigGenerator:
     """Main class for generating store configurations."""
     
     def __init__(self, mapping_file: str = "store_wall_mapping.json",
-                 template_file: str = "template.xml"):
+                 template_file: str = "template.xml",
+                 ip_mapping_file: str = "store_ip_mapping.txt"):
         self.mapping_file = mapping_file
         self.template_file = template_file
+        self.ip_mapping_file = ip_mapping_file
         self.store_mapping: Optional[Dict[str, Any]] = None
         self.template_root: Optional[ET.Element] = None
+        self.store_ip_mapping: Optional[Dict[str, str]] = None
         
     def load_store_mapping(self) -> Dict[str, Any]:
         """Load and validate the store mapping JSON file."""
@@ -61,6 +64,49 @@ class StoreConfigGenerator:
         except Exception as e:
             print(f"❌ Error loading mapping: {e}")
             sys.exit(1)
+    
+    def load_store_ip_mapping(self) -> Dict[str, str]:
+        """Load the simple store IP mapping file."""
+        try:
+            store_ip_mapping = {}
+            
+            with open(self.ip_mapping_file, 'r', encoding='utf-8') as f:
+                for line_num, line in enumerate(f, 1):
+                    line = line.strip()
+                    
+                    # Skip empty lines and comments
+                    if not line or line.startswith('#'):
+                        continue
+                    
+                    # Parse store_id:ip_address format
+                    if ':' in line:
+                        parts = line.split(':', 1)
+                        if len(parts) == 2:
+                            store_id = parts[0].strip()
+                            ip_address = parts[1].strip()
+                            
+                            # Validate IP address
+                            if self.validate_ip_address(ip_address):
+                                store_ip_mapping[store_id] = ip_address
+                            else:
+                                print(f"⚠️  Warning: Invalid IP address '{ip_address}' for store {store_id} on line {line_num}")
+                        else:
+                            print(f"⚠️  Warning: Invalid format on line {line_num}: {line}")
+                    else:
+                        print(f"⚠️  Warning: Invalid format on line {line_num}: {line}")
+            
+            self.store_ip_mapping = store_ip_mapping
+            print(f"✓ Loaded IP mapping for {len(store_ip_mapping)} stores from '{self.ip_mapping_file}'")
+            return store_ip_mapping
+            
+        except FileNotFoundError:
+            print(f"⚠️  Warning: IP mapping file '{self.ip_mapping_file}' not found - web-ui-config changes will be skipped")
+            self.store_ip_mapping = {}
+            return {}
+        except Exception as e:
+            print(f"⚠️  Warning: Error loading IP mapping: {e} - web-ui-config changes will be skipped")
+            self.store_ip_mapping = {}
+            return {}
     
     def load_template(self) -> ET.Element:
         """Load the base structure template XML file."""
@@ -99,6 +145,29 @@ class StoreConfigGenerator:
             change.set("value", ip_address)
             changes.append(change)
             
+        return changes
+    
+    def generate_webui_changes(self, store_id: str) -> List[ET.Element]:
+        """Generate web-ui-config changes for a store based on IP mapping."""
+        changes: List[ET.Element] = []
+        
+        # Load IP mapping if not already loaded
+        if self.store_ip_mapping is None:
+            self.load_store_ip_mapping()
+        
+        # Check if store has IP mapping
+        if self.store_ip_mapping and store_id in self.store_ip_mapping:
+            ip_address = self.store_ip_mapping[store_id]
+            
+            # Create web-ui-config change
+            change = ET.Element("change")
+            change.set("file", "web-ui-config.xml")
+            change.set("url", "webUiConfig.system.serverAddress")
+            change.set("value", f"http://{ip_address}:8080/app-wdm")
+            changes.append(change)
+            
+            print(f"   Added web-ui-config change for store {store_id}: http://{ip_address}:8080/app-wdm")
+        
         return changes
     
     def create_store_structure(self, store_id: str, store_data: Dict[str, Any]) -> ET.Element:
@@ -159,6 +228,11 @@ class StoreConfigGenerator:
                         if new_child.get("alias") == "CSE-wdm":
                             wall_changes = self.generate_wall_changes(store_id, store_data["walls"])
                             for change in wall_changes:
+                                new_child.append(change)
+                            
+                            # Add web-ui-config changes to CSE-wdm node
+                            webui_changes = self.generate_webui_changes(store_id)
+                            for change in webui_changes:
                                 new_child.append(change)
                         
                         store_node.append(new_child)
@@ -290,6 +364,11 @@ class StoreConfigGenerator:
                                 wall_changes = self.generate_wall_changes(store_id, store_data["walls"])
                                 for change in wall_changes:
                                     new_child.append(change)
+                                
+                                # Add web-ui-config changes to CSE-wdm node
+                                webui_changes = self.generate_webui_changes(store_id)
+                                for change in webui_changes:
+                                    new_child.append(change)
                             
                             store_node.append(new_child)
         
@@ -357,6 +436,8 @@ Examples:
     parser.add_argument("--template", type=str,
                        default="template.xml",
                        help="Template file (default: template.xml)")
+    parser.add_argument("--ip-mapping", type=str, default="store_ip_mapping.txt",
+                       help="Store IP mapping file for web-ui-config (default: store_ip_mapping.txt)")
     
     args = parser.parse_args()
     
@@ -365,7 +446,7 @@ Examples:
         sys.exit(1)
     
     # Initialize generator
-    generator = StoreConfigGenerator(args.mapping, args.template)
+    generator = StoreConfigGenerator(args.mapping, args.template, args.ip_mapping)
     
     try:
         if args.all:
