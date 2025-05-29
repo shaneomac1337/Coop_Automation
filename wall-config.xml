@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wall-config>
+	<walls hostNamePattern="*${clientId}.*">
+		<wall wallId="1" wallType="WALL_TYPE_1">
+			<clientId>127.0.0.1</clientId>
+		</wall>
+		<wall wallId="2" wallType="WALL_TYPE_1">
+			<clientId>127.0.0.1</clientId>
+		</wall>
+		<wall wallId="3" wallType="WALL_TYPE_1">
+			<clientId>DUMMY</clientId>
+		</wall>
+		<wall wallId="4" wallType="WALL_TYPE_1">
+			<clientId>DUMMY</clientId>
+		</wall>
+		<wall wallId="100" wallType="WALL_TYPE_DISPOSAL">
+			<clientId>DUMMY</clientId>
+		</wall>
+	</walls>
+	<wall-types>
+		<wall-type name="WALL_TYPE_1" description="Dispensing wall for 50 devices with handicap rows 5-6." endHandicapRow="6" regime="DISPENSING" startHandicapRow="5" thresholdAvailableDevices="10" thresholdOfflineDevices="40"/>
+		<wall-type name="WALL_TYPE_DISPOSAL" description="Disposal wall." regime="DISPOSAL"/>
+	</wall-types>
+</wall-config>

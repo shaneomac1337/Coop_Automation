@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<structure>
+	<systems>
+		<system alias="GKR-Store" name="GKR-Store"/>
+		<system alias="AGL-lps-lpa" name="AGL-lps-lpa"/>
+		<system alias="AGL-lps-store" name="AGL-lps-store"/>
+		<system alias="AGL-sdc-store" name="AGL-sdc-store"/>
+		<system alias="GKR-InfoServer" name="GKR-InfoServer"/>
+	</systems>
+	<time-regimes>
+		<time-regime description="Nonstop communication time slot" name="24/7" periodic-active="true" permanent-active="false">
+			<time-regime-entry entry-type="PERIODIC">
+				<time-window name="24h"/>
+			</time-regime-entry>
+		</time-regime>
+		<time-windows>
+			<time-window description="Nonstop time slot" name="24h" time-from="00:00:00.000Z" time-to="00:00:00.000Z"/>
+		</time-windows>
+	</time-regimes>
+	<central-is>
+		<infoserver id="ENTERPRISE.ENTERPRISE_CENTRAL.HIS" name="Hybrid-InfoServer"/>
+	</central-is>
+	<nodes>
+		<node alias="GKR-Store" country="GB" is="5889_HIS" name="SOUTH_SHIELDS_(NEW)_(5889)" parent-node-ident="ENTERPRISE.TENANT.UNITED_KINGDOM" rsid="5889" sequence="5889" unique-name="SOUTH_SHIELDS_(NEW)_(5889)">
+			<node alias="AGL-lps-lpa" country="GB" is="5889_HIS" name="LPA" unique-name="5889.LPA"/>
+			<node alias="AGL-lps-store" country="GB" is="ENTERPRISE.ENTERPRISE_CENTRAL.HIS" name="LPS Store" unique-name="5889.LPS.STORE">
+				<change file="printers.xml" url="printers.printerAdapterList.printerAdapter.adapterAddress" value="pvwps05889-001.s05889.asda.uk:8443"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter.uniqueName" value="CS735-001-5889"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter.barcode" value="CS735-001-5889.S05889.asda.uk"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter:2.uniqueName" value="CS735-002-5889"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter:2.barcode" value="CS735-002-5889.S05889.asda.uk"/>
+			</node>
+			<node alias="AGL-sdc-store" country="GB" is="ENTERPRISE.ENTERPRISE_CENTRAL.HIS" name="SDC Store" unique-name="5889.SDC.STORE"/>
+			<infoserver alias="GKR-InfoServer" country="GB" id="5889_HIS" is-name="5889.HIS" name="5889.HIS" port="7422" status="active" time-regime-send="24/7" unique-name="5889_HIS" url="pvwps05889-001.s05889.asda.uk"/>
+		</node>
+		<node alias="GKR-Store" country="GB" is="4876_HIS" name="LEWISHAM_(4876)" parent-node-ident="ENTERPRISE.TENANT.UNITED_KINGDOM" rsid="4876" sequence="4876" unique-name="LEWISHAM_(4876)">
+			<node alias="AGL-lps-lpa" country="GB" is="4876_HIS" name="LPA" unique-name="4876.LPA"/>
+			<node alias="AGL-lps-store" country="GB" is="ENTERPRISE.ENTERPRISE_CENTRAL.HIS" name="LPS Store" unique-name="4876.LPS.STORE">
+				<change file="printers.xml" url="printers.printerAdapterList.printerAdapter.adapterAddress" value="pvwps04876-001.s04876.asda.uk:8443"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter.uniqueName" value="CS735-001-4876"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter.barcode" value="CS735-001-4876.S04876.asda.uk"/>
+			</node>
+			<node alias="AGL-sdc-store" country="GB" is="ENTERPRISE.ENTERPRISE_CENTRAL.HIS" name="SDC Store" unique-name="4876.SDC.STORE"/>
+			<infoserver alias="GKR-InfoServer" country="GB" id="4876_HIS" is-name="4876.HIS" name="4876.HIS" port="7422" status="active" time-regime-send="24/7" unique-name="4876_HIS" url="pvwps04876-001.s04876.asda.uk"/>
+		</node>
+		<node alias="GKR-Store" country="GB" is="4950_HIS" name="DARLINGTON_(4950)" parent-node-ident="ENTERPRISE.TENANT.UNITED_KINGDOM" rsid="4950" sequence="4950" unique-name="DARLINGTON_(4950)">
+			<node alias="AGL-lps-lpa" country="GB" is="4950_HIS" name="LPA" unique-name="4950.LPA"/>
+			<node alias="AGL-lps-store" country="GB" is="ENTERPRISE.ENTERPRISE_CENTRAL.HIS" name="LPS Store" unique-name="4950.LPS.STORE">
+				<change file="printers.xml" url="printers.printerAdapterList.printerAdapter.adapterAddress" value="pvwps04950-001.s04950.asda.uk:8443"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter.uniqueName" value="CS735-001-4950"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter.barcode" value="CS735-001-4950.S04950.asda.uk"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter:2.uniqueName" value="CS735-002-4950"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter:2.barcode" value="CS735-002-4950.S04950.asda.uk"/>
+			</node>
+			<node alias="AGL-sdc-store" country="GB" is="ENTERPRISE.ENTERPRISE_CENTRAL.HIS" name="SDC Store" unique-name="4950.SDC.STORE"/>
+			<infoserver alias="GKR-InfoServer" country="GB" id="4950_HIS" is-name="4950.HIS" name="4950.HIS" port="7422" status="active" time-regime-send="24/7" unique-name="4950_HIS" url="pvwps04950-001.s04950.asda.uk"/>
+		</node>
+		<node alias="GKR-Store" country="GB" is="5865_HIS" name="CAPEHILL_(5865)" parent-node-ident="ENTERPRISE.TENANT.UNITED_KINGDOM" rsid="5865" sequence="5865" unique-name="CAPEHILL_(5865)">
+			<node alias="AGL-lps-lpa" country="GB" is="5865_HIS" name="LPA" unique-name="5865.LPA"/>
+			<node alias="AGL-lps-store" country="GB" is="ENTERPRISE.ENTERPRISE_CENTRAL.HIS" name="LPS Store" unique-name="5865.LPS.STORE">
+				<change file="printers.xml" url="printers.printerAdapterList.printerAdapter.adapterAddress" value="pvwps05865-001.s05865.asda.uk:8443"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter.uniqueName" value="CS735-001-5865"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter.barcode" value="CS735-001-5865.S05865.asda.uk"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter:2.uniqueName" value="CS735-002-5865"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter:2.barcode" value="CS735-002-5865.S05865.asda.uk"/>
+			</node>
+			<node alias="AGL-sdc-store" country="GB" is="ENTERPRISE.ENTERPRISE_CENTRAL.HIS" name="SDC Store" unique-name="5865.SDC.STORE"/>
+			<infoserver alias="GKR-InfoServer" country="GB" id="5865_HIS" is-name="5865.HIS" name="5865.HIS" port="7422" status="active" time-regime-send="24/7" unique-name="5865_HIS" url="pvwps05865-001.s05865.asda.uk"/>
+		</node>
+		<node alias="GKR-Store" country="GB" is="4351_HIS" name="ASDA_LIVING_WREKIN_PARK_(4351)" parent-node-ident="ENTERPRISE.TENANT.UNITED_KINGDOM" rsid="4351" sequence="4351" unique-name="ASDA_LIVING_WREKIN_PARK_(4351)">
+			<node alias="AGL-lps-lpa" country="GB" is="4351_HIS" name="LPA" unique-name="4351.LPA"/>
+			<node alias="AGL-lps-store" country="GB" is="ENTERPRISE.ENTERPRISE_CENTRAL.HIS" name="LPS Store" unique-name="4351.LPS.STORE">
+				<change file="printers.xml" url="printers.printerAdapterList.printerAdapter.adapterAddress" value="pvwps04351-001.s04351.asda.uk:8443"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter.uniqueName" value="CS735-001-4351"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter.barcode" value="CS735-001-4351.S04351.asda.uk"/>
+			</node>
+			<node alias="AGL-sdc-store" country="GB" is="ENTERPRISE.ENTERPRISE_CENTRAL.HIS" name="SDC Store" unique-name="4351.SDC.STORE"/>
+			<infoserver alias="GKR-InfoServer" country="GB" id="4351_HIS" is-name="4351.HIS" name="4351.HIS" port="7422" status="active" time-regime-send="24/7" unique-name="4351_HIS" url="pvwps04351-001.s04351.asda.uk"/>
+		</node>
+		<node alias="GKR-Store" country="GB" is="4901_HIS" name="STEPNEY_GREEN_(4901)" parent-node-ident="ENTERPRISE.TENANT.UNITED_KINGDOM" rsid="4901" sequence="4901" unique-name="STEPNEY_GREEN_(4901)">
+			<node alias="AGL-lps-lpa" country="GB" is="4901_HIS" name="LPA" unique-name="4901.LPA"/>
+			<node alias="AGL-lps-store" country="GB" is="ENTERPRISE.ENTERPRISE_CENTRAL.HIS" name="LPS Store" unique-name="4901.LPS.STORE">
+				<change file="printers.xml" url="printers.printerAdapterList.printerAdapter.adapterAddress" value="pvwps04901-001.s04901.asda.uk:8443"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter.uniqueName" value="CS735-001-4901"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter.barcode" value="CS735-001-4901.S04901.asda.uk"/>
+			</node>
+			<node alias="AGL-sdc-store" country="GB" is="ENTERPRISE.ENTERPRISE_CENTRAL.HIS" name="SDC Store" unique-name="4901.SDC.STORE"/>
+			<infoserver alias="GKR-InfoServer" country="GB" id="4901_HIS" is-name="4901.HIS" name="4901.HIS" port="7422" status="active" time-regime-send="24/7" unique-name="4901_HIS" url="pvwps04901-001.s04901.asda.uk"/>
+		</node>
+		<node alias="GKR-Store" country="GB" is="4977_HIS" name="MINWORTH_(4977)" parent-node-ident="ENTERPRISE.TENANT.UNITED_KINGDOM" rsid="4977" sequence="4977" unique-name="MINWORTH_(4977)">
+			<node alias="AGL-lps-lpa" country="GB" is="4977_HIS" name="LPA" unique-name="4977.LPA"/>
+			<node alias="AGL-lps-store" country="GB" is="ENTERPRISE.ENTERPRISE_CENTRAL.HIS" name="LPS Store" unique-name="4977.LPS.STORE">
+				<change file="printers.xml" url="printers.printerAdapterList.printerAdapter.adapterAddress" value="pvwps04977-001.s04977.asda.uk:8443"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter.uniqueName" value="CS735-001-4977"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter.barcode" value="CS735-001-4977.S04977.asda.uk"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter:2.uniqueName" value="CS735-002-4977"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter:2.barcode" value="CS735-002-4977.S04977.asda.uk"/>
+			</node>
+			<node alias="AGL-sdc-store" country="GB" is="ENTERPRISE.ENTERPRISE_CENTRAL.HIS" name="SDC Store" unique-name="4977.SDC.STORE"/>
+			<infoserver alias="GKR-InfoServer" country="GB" id="4977_HIS" is-name="4977.HIS" name="4977.HIS" port="7422" status="active" time-regime-send="24/7" unique-name="4977_HIS" url="pvwps04977-001.s04977.asda.uk"/>
+		</node>
+		<node alias="GKR-Store" country="GB" is="5123_HIS" name="DIDCOT_GREAT_WESTERN_PARK_(5123)" parent-node-ident="ENTERPRISE.TENANT.UNITED_KINGDOM" rsid="5123" sequence="5123" unique-name="DIDCOT_GREAT_WESTERN_PARK_(5123)">
+			<node alias="AGL-lps-lpa" country="GB" is="5123_HIS" name="LPA" unique-name="5123.LPA"/>
+			<node alias="AGL-lps-store" country="GB" is="ENTERPRISE.ENTERPRISE_CENTRAL.HIS" name="LPS Store" unique-name="5123.LPS.STORE">
+				<change file="printers.xml" url="printers.printerAdapterList.printerAdapter.adapterAddress" value="pvwps05123-001.s05123.asda.uk:8443"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter.uniqueName" value="CS735-001-5123"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter.barcode" value="CS735-001-5123.S05123.asda.uk"/>
+			</node>
+			<node alias="AGL-sdc-store" country="GB" is="ENTERPRISE.ENTERPRISE_CENTRAL.HIS" name="SDC Store" unique-name="5123.SDC.STORE"/>
+			<infoserver alias="GKR-InfoServer" country="GB" id="5123_HIS" is-name="5123.HIS" name="5123.HIS" port="7422" status="active" time-regime-send="24/7" unique-name="5123_HIS" url="pvwps05123-001.s05123.asda.uk"/>
+		</node>
+		<node alias="GKR-Store" country="GB" is="4137_HIS" name="ASHTON_(4137)" parent-node-ident="ENTERPRISE.TENANT.UNITED_KINGDOM" rsid="4137" sequence="4137" unique-name="ASHTON_(4137)">
+			<node alias="AGL-lps-lpa" country="GB" is="4137_HIS" name="LPA" unique-name="4137.LPA"/>
+			<node alias="AGL-lps-store" country="GB" is="ENTERPRISE.ENTERPRISE_CENTRAL.HIS" name="LPS Store" unique-name="4137.LPS.STORE">
+				<change file="printers.xml" url="printers.printerAdapterList.printerAdapter.adapterAddress" value="pvwps04137-001.s04137.asda.uk:8443"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter.uniqueName" value="CS735-001-4137"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter.barcode" value="CS735-001-4137.S04137.asda.uk"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter:2.uniqueName" value="CS735-002-4137"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter:2.barcode" value="CS735-002-4137.S04137.asda.uk"/>
+			</node>
+			<node alias="AGL-sdc-store" country="GB" is="ENTERPRISE.ENTERPRISE_CENTRAL.HIS" name="SDC Store" unique-name="4137.SDC.STORE"/>
+			<infoserver alias="GKR-InfoServer" country="GB" id="4137_HIS" is-name="4137.HIS" name="4137.HIS" port="7422" status="active" time-regime-send="24/7" unique-name="4137_HIS" url="pvwps04137-001.s04137.asda.uk"/>
+		</node>
+		<node alias="GKR-Store" country="GB" is="4520_HIS" name="ASHTON_QUEENS_ROAD_(4520)" parent-node-ident="ENTERPRISE.TENANT.UNITED_KINGDOM" rsid="4520" sequence="4520" unique-name="ASHTON_QUEENS_ROAD_(4520)">
+			<node alias="AGL-lps-lpa" country="GB" is="4520_HIS" name="LPA" unique-name="4520.LPA"/>
+			<node alias="AGL-lps-store" country="GB" is="ENTERPRISE.ENTERPRISE_CENTRAL.HIS" name="LPS Store" unique-name="4520.LPS.STORE">
+				<change file="printers.xml" url="printers.printerAdapterList.printerAdapter.adapterAddress" value="pvwps04520-001.s04520.asda.uk:8443"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter.uniqueName" value="CS735-001-4520"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter.barcode" value="CS735-001-4520.S04520.asda.uk"/>
+			</node>
+			<node alias="AGL-sdc-store" country="GB" is="ENTERPRISE.ENTERPRISE_CENTRAL.HIS" name="SDC Store" unique-name="4520.SDC.STORE"/>
+			<infoserver alias="GKR-InfoServer" country="GB" id="4520_HIS" is-name="4520.HIS" name="4520.HIS" port="7422" status="active" time-regime-send="24/7" unique-name="4520_HIS" url="pvwps04520-001.s04520.asda.uk"/>
+		</node>
+		<node alias="GKR-Store" country="GB" is="4490_HIS" name="OLDHAM_HOLLINS_ROAD_(4490)" parent-node-ident="ENTERPRISE.TENANT.UNITED_KINGDOM" rsid="4490" sequence="4490" unique-name="OLDHAM_HOLLINS_ROAD_(4490)">
+			<node alias="AGL-lps-lpa" country="GB" is="4490_HIS" name="LPA" unique-name="4490.LPA"/>
+			<node alias="AGL-lps-store" country="GB" is="ENTERPRISE.ENTERPRISE_CENTRAL.HIS" name="LPS Store" unique-name="4490.LPS.STORE">
+				<change file="printers.xml" url="printers.printerAdapterList.printerAdapter.adapterAddress" value="pvwps04490-001.s04490.asda.uk:8443"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter.uniqueName" value="CS735-001-4490"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter.barcode" value="CS735-001-4490.S04490.asda.uk"/>
+			</node>
+			<node alias="AGL-sdc-store" country="GB" is="ENTERPRISE.ENTERPRISE_CENTRAL.HIS" name="SDC Store" unique-name="4490.SDC.STORE"/>
+			<infoserver alias="GKR-InfoServer" country="GB" id="4490_HIS" is-name="4490.HIS" name="4490.HIS" port="7422" status="active" time-regime-send="24/7" unique-name="4490_HIS" url="pvwps04490-001.s04490.asda.uk"/>
+		</node>
+		<node alias="GKR-Store" country="GB" is="4923_HIS" name="HAMILTON_(4923)" parent-node-ident="ENTERPRISE.TENANT.UNITED_KINGDOM" rsid="4923" sequence="4923" unique-name="HAMILTON_(4923)">
+			<node alias="AGL-lps-lpa" country="GB" is="4923_HIS" name="LPA" unique-name="4923.LPA"/>
+			<node alias="AGL-lps-store" country="GB" is="ENTERPRISE.ENTERPRISE_CENTRAL.HIS" name="LPS Store" unique-name="4923.LPS.STORE">
+				<change file="printers.xml" url="printers.printerAdapterList.printerAdapter.adapterAddress" value="pvwps04923-001.s04923.asda.uk:8443"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter.uniqueName" value="CS735-001-4923"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter.barcode" value="CS735-001-4923.S04923.asda.uk"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter:2.uniqueName" value="CS735-002-4923"/>
+				<change file="printers.xml" url="printers.physicalPrinterList.physicalPrinter:2.barcode" value="CS735-002-4923.S04923.asda.uk"/>
+			</node>
+			<node alias="AGL-sdc-store" country="GB" is="ENTERPRISE.ENTERPRISE_CENTRAL.HIS" name="SDC Store" unique-name="4923.SDC.STORE"/>
+			<infoserver alias="GKR-InfoServer" country="GB" id="4923_HIS" is-name="4923.HIS" name="4923.HIS" port="7422" status="active" time-regime-send="24/7" unique-name="4923_HIS" url="pvwps04923-001.s04923.asda.uk"/>
+		</node>
+	</nodes>
+</structure>

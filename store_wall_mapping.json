@@ -1,0 +1,46 @@
+{
+  "metadata": {
+    "description": "Store to wall IP address mapping for WDM configuration",
+    "version": "1.0",
+    "created": "2025-05-29",
+    "mandatory_walls": [1, 100],
+    "wall_types": {
+      "1": "WALL_TYPE_1 (Dispensing)",
+      "2": "WALL_TYPE_1 (Dispensing)", 
+      "3": "WALL_TYPE_1 (Dispensing)",
+      "100": "WALL_TYPE_DISPOSAL (Disposal)"
+    }
+  },
+  "stores": {
+    "9999": {
+      "name": "Installation Test Store",
+      "country": "SE",
+      "parent_node": "ENTERPRISE.TENANT.SWEDEN",
+      "walls": {
+        "1": "192.168.99.101",
+        "2": "192.168.99.102", 
+        "3": "192.168.99.103",
+        "100": "192.168.99.200"
+      }
+    },
+    "1674": {
+      "name": "Store 1674",
+      "country": "SE",
+      "parent_node": "ENTERPRISE.TENANT.SWEDEN", 
+      "walls": {
+        "1": "192.168.74.101",
+        "100": "192.168.74.200"
+      }
+    },
+    "1655": {
+      "name": "Store 1655",
+      "country": "SE",
+      "parent_node": "ENTERPRISE.TENANT.SWEDEN",
+      "walls": {
+        "1": "192.168.55.101",
+        "2": "192.168.55.102",
+        "100": "192.168.55.200"
+      }
+    }
+  }
+}

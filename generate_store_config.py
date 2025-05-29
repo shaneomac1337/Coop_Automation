@@ -1,0 +1,397 @@
+#!/usr/bin/env python3
+"""
+Store Configuration Generator
+
+This script generates store manager configuration files by processing
+store-to-wall IP mappings and creating structure XML files with
+appropriate wall configuration changes.
+
+Usage:
+    python generate_store_config.py --all
+    python generate_store_config.py --store 9999
+    python generate_store_config.py --help
+"""
+
+import json
+import xml.etree.ElementTree as ET
+from xml.dom import minidom
+import argparse
+import sys
+from pathlib import Path
+import ipaddress
+from typing import Dict, List, Any, Optional
+
+
+class StoreConfigGenerator:
+    """Main class for generating store configurations."""
+    
+    def __init__(self, mapping_file: str = "store_wall_mapping.json",
+                 template_file: str = "template.xml"):
+        self.mapping_file = mapping_file
+        self.template_file = template_file
+        self.store_mapping: Optional[Dict[str, Any]] = None
+        self.template_root: Optional[ET.Element] = None
+        
+    def load_store_mapping(self) -> Dict[str, Any]:
+        """Load and validate the store mapping JSON file."""
+        try:
+            with open(self.mapping_file, 'r', encoding='utf-8') as f:
+                self.store_mapping = json.load(f)
+            
+            # Validate mandatory walls
+            if self.store_mapping and 'metadata' in self.store_mapping:
+                mandatory_walls = self.store_mapping['metadata']['mandatory_walls']
+                for store_id, store_data in self.store_mapping['stores'].items():
+                    for wall_id in mandatory_walls:
+                        if str(wall_id) not in store_data['walls']:
+                            raise ValueError(f"Store {store_id} missing mandatory wall {wall_id}")
+            
+            if self.store_mapping is not None:
+                print(f"✓ Loaded mapping for {len(self.store_mapping['stores'])} stores")
+                return self.store_mapping
+            else:
+                raise ValueError("Failed to load store mapping")
+            
+        except FileNotFoundError:
+            print(f"❌ Error: Mapping file '{self.mapping_file}' not found")
+            sys.exit(1)
+        except json.JSONDecodeError as e:
+            print(f"❌ Error: Invalid JSON in mapping file: {e}")
+            sys.exit(1)
+        except Exception as e:
+            print(f"❌ Error loading mapping: {e}")
+            sys.exit(1)
+    
+    def load_template(self) -> ET.Element:
+        """Load the base structure template XML file."""
+        try:
+            tree = ET.parse(self.template_file)
+            self.template_root = tree.getroot()
+            print(f"✓ Loaded template from '{self.template_file}'")
+            return self.template_root
+            
+        except FileNotFoundError:
+            print(f"❌ Error: Template file '{self.template_file}' not found")
+            sys.exit(1)
+        except ET.ParseError as e:
+            print(f"❌ Error: Invalid XML in template file: {e}")
+            sys.exit(1)
+    
+    def validate_ip_address(self, ip: str) -> bool:
+        """Validate IP address format."""
+        try:
+            ipaddress.IPv4Address(ip)
+            return True
+        except ipaddress.AddressValueError:
+            return False
+    
+    def generate_wall_changes(self, store_id: str, walls: Dict[str, str]) -> List[ET.Element]:
+        """Generate wall configuration change elements for a store."""
+        changes: List[ET.Element] = []
+        
+        for wall_id, ip_address in walls.items():
+            if not self.validate_ip_address(ip_address):
+                raise ValueError(f"Invalid IP address '{ip_address}' for store {store_id}, wall {wall_id}")
+            
+            change = ET.Element("change")
+            change.set("file", "wall-config.xml")
+            change.set("url", f"wall-config.walls.{wall_id}.clientId")
+            change.set("value", ip_address)
+            changes.append(change)
+            
+        return changes
+    
+    def create_store_structure(self, store_id: str, store_data: Dict[str, Any]) -> ET.Element:
+        """Create a complete store structure based on template."""
+        # Create a deep copy of the template
+        structure = ET.Element("structure")
+        
+        # Copy systems section
+        systems = ET.SubElement(structure, "systems")
+        if self.template_root is not None:
+            template_systems = self.template_root.find("systems")
+            if template_systems is not None:
+                for system in template_systems:
+                    systems.append(ET.fromstring(ET.tostring(system)))
+        
+        # Copy time-regimes section
+        time_regimes = ET.SubElement(structure, "time-regimes")
+        if self.template_root is not None:
+            template_time_regimes = self.template_root.find("time-regimes")
+            if template_time_regimes is not None:
+                for child in template_time_regimes:
+                    time_regimes.append(ET.fromstring(ET.tostring(child)))
+        
+        # Copy central-is section
+        central_is = ET.SubElement(structure, "central-is")
+        if self.template_root is not None:
+            template_central_is = self.template_root.find("central-is")
+            if template_central_is is not None:
+                for child in template_central_is:
+                    central_is.append(ET.fromstring(ET.tostring(child)))
+        
+        # Create nodes section with store-specific data
+        nodes = ET.SubElement(structure, "nodes")
+        
+        # Create main store node
+        store_node = ET.SubElement(nodes, "node")
+        store_node.set("alias", "GKR-Store")
+        store_node.set("country", store_data["country"])
+        store_node.set("name", store_data["name"])
+        store_node.set("parent-node-ident", store_data["parent_node"])
+        store_node.set("rsid", store_id)
+        store_node.set("unique-name", f"{store_data['parent_node']}.{store_data['name'].upper().replace(' ', '_')}")
+        
+        # Add child nodes from template
+        if self.template_root is not None:
+            template_store_node = self.template_root.find(".//node[@alias='GKR-Store']")
+            if template_store_node is not None:
+                for child_node in template_store_node:
+                    if child_node.tag == "node":
+                        new_child = ET.fromstring(ET.tostring(child_node))
+                        # Update unique names with store ID
+                        if "unique-name" in new_child.attrib:
+                            unique_name = new_child.get("unique-name")
+                            if unique_name:
+                                new_child.set("unique-name", unique_name.replace("9999", store_id))
+                        
+                        # Add wall changes to CSE-wdm node
+                        if new_child.get("alias") == "CSE-wdm":
+                            wall_changes = self.generate_wall_changes(store_id, store_data["walls"])
+                            for change in wall_changes:
+                                new_child.append(change)
+                        
+                        store_node.append(new_child)
+        
+        return structure
+    
+    def format_xml(self, element: ET.Element) -> str:
+        """Format XML with proper indentation."""
+        rough_string = ET.tostring(element, encoding='unicode')
+        reparsed = minidom.parseString(rough_string)
+        return reparsed.toprettyxml(indent="    ")[23:]  # Remove XML declaration
+    
+    def generate_store_config(self, store_id: str) -> str:
+        """Generate configuration for a specific store."""
+        if self.store_mapping is None:
+            self.load_store_mapping()
+        
+        if self.template_root is None:
+            self.load_template()
+        
+        if self.store_mapping is None:
+            raise ValueError("Store mapping not loaded")
+            
+        if store_id not in self.store_mapping["stores"]:
+            raise ValueError(f"Store {store_id} not found in mapping")
+        
+        store_data = self.store_mapping["stores"][store_id]
+        structure = self.create_store_structure(store_id, store_data)
+        
+        # Add XML declaration
+        xml_content = '<?xml version="1.0" encoding="UTF-8"?>\n'
+        xml_content += self.format_xml(structure)
+        
+        return xml_content
+    
+    def save_store_config(self, store_id: str, output_dir: str = "output") -> str:
+        """Generate and save configuration for a specific store."""
+        try:
+            # Create output directory if it doesn't exist
+            Path(output_dir).mkdir(exist_ok=True)
+            
+            # Generate configuration
+            config_xml = self.generate_store_config(store_id)
+            
+            # Save to file
+            output_file = f"{output_dir}/store_{store_id}_config.xml"
+            with open(output_file, 'w', encoding='utf-8') as f:
+                f.write(config_xml)
+            
+            print(f"✓ Generated configuration for store {store_id}: {output_file}")
+            return output_file
+            
+        except Exception as e:
+            print(f"❌ Error generating config for store {store_id}: {e}")
+            raise
+    
+    def generate_combined_config(self, output_dir: str = "output") -> str:
+        """Generate a single configuration file containing all stores."""
+        if self.store_mapping is None:
+            self.load_store_mapping()
+        
+        if self.template_root is None:
+            self.load_template()
+        
+        if self.store_mapping is None:
+            raise ValueError("Store mapping not loaded")
+        
+        # Create output directory if it doesn't exist
+        Path(output_dir).mkdir(exist_ok=True)
+        
+        # Create combined structure
+        structure = ET.Element("structure")
+        
+        # Copy systems section from template
+        systems = ET.SubElement(structure, "systems")
+        if self.template_root is not None:
+            template_systems = self.template_root.find("systems")
+            if template_systems is not None:
+                for system in template_systems:
+                    systems.append(ET.fromstring(ET.tostring(system)))
+        
+        # Copy time-regimes section
+        time_regimes = ET.SubElement(structure, "time-regimes")
+        if self.template_root is not None:
+            template_time_regimes = self.template_root.find("time-regimes")
+            if template_time_regimes is not None:
+                for child in template_time_regimes:
+                    time_regimes.append(ET.fromstring(ET.tostring(child)))
+        
+        # Copy central-is section
+        central_is = ET.SubElement(structure, "central-is")
+        if self.template_root is not None:
+            template_central_is = self.template_root.find("central-is")
+            if template_central_is is not None:
+                for child in template_central_is:
+                    central_is.append(ET.fromstring(ET.tostring(child)))
+        
+        # Create nodes section with all stores
+        nodes = ET.SubElement(structure, "nodes")
+        
+        # Add each store as a separate node
+        for store_id, store_data in self.store_mapping["stores"].items():
+            print(f"   Adding store {store_id} to combined configuration...")
+            
+            # Create store node
+            store_node = ET.SubElement(nodes, "node")
+            store_node.set("alias", "GKR-Store")
+            store_node.set("country", store_data["country"])
+            store_node.set("name", store_data["name"])
+            store_node.set("parent-node-ident", store_data["parent_node"])
+            store_node.set("rsid", store_id)
+            store_node.set("unique-name", f"{store_data['parent_node']}.{store_data['name'].upper().replace(' ', '_')}")
+            
+            # Add child nodes from template
+            if self.template_root is not None:
+                template_store_node = self.template_root.find(".//node[@alias='GKR-Store']")
+                if template_store_node is not None:
+                    for child_node in template_store_node:
+                        if child_node.tag == "node":
+                            new_child = ET.fromstring(ET.tostring(child_node))
+                            # Update unique names with store ID
+                            if "unique-name" in new_child.attrib:
+                                unique_name = new_child.get("unique-name")
+                                if unique_name:
+                                    new_child.set("unique-name", unique_name.replace("9999", store_id))
+                            
+                            # Add wall changes to CSE-wdm node
+                            if new_child.get("alias") == "CSE-wdm":
+                                wall_changes = self.generate_wall_changes(store_id, store_data["walls"])
+                                for change in wall_changes:
+                                    new_child.append(change)
+                            
+                            store_node.append(new_child)
+        
+        # Generate XML content
+        xml_content = '<?xml version="1.0" encoding="UTF-8"?>\n'
+        xml_content += self.format_xml(structure)
+        
+        # Save to file
+        output_file = f"{output_dir}/all_stores_config.xml"
+        with open(output_file, 'w', encoding='utf-8') as f:
+            f.write(xml_content)
+        
+        print(f"✓ Generated combined configuration: {output_file}")
+        return output_file
+
+    def generate_all_stores(self, output_dir: str = "output", combined: bool = False) -> List[str]:
+        """Generate configurations for all stores in the mapping."""
+        if combined:
+            # Generate single combined file
+            combined_file = self.generate_combined_config(output_dir)
+            return [combined_file]
+        else:
+            # Generate separate files for each store
+            if self.store_mapping is None:
+                self.load_store_mapping()
+            
+            generated_files: List[str] = []
+            
+            if self.store_mapping is not None:
+                for store_id in self.store_mapping["stores"]:
+                    try:
+                        output_file = self.save_store_config(store_id, output_dir)
+                        generated_files.append(output_file)
+                    except Exception as e:
+                        print(f"❌ Failed to generate config for store {store_id}: {e}")
+            
+            print(f"\n✓ Generated {len(generated_files)} store configurations")
+            return generated_files
+
+
+def main() -> None:
+    """Main entry point for the script."""
+    parser = argparse.ArgumentParser(
+        description="Generate store manager configuration files",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  python generate_store_config.py --all
+  python generate_store_config.py --all --combined
+  python generate_store_config.py --store 9999
+  python generate_store_config.py --store 1674 --output custom_output
+        """
+    )
+    
+    parser.add_argument("--all", action="store_true",
+                       help="Generate configurations for all stores")
+    parser.add_argument("--store", type=str,
+                       help="Generate configuration for specific store ID")
+    parser.add_argument("--combined", action="store_true",
+                       help="Generate all stores in a single combined file (use with --all)")
+    parser.add_argument("--output", type=str, default="output",
+                       help="Output directory (default: output)")
+    parser.add_argument("--mapping", type=str, default="store_wall_mapping.json",
+                       help="Store mapping file (default: store_wall_mapping.json)")
+    parser.add_argument("--template", type=str,
+                       default="template.xml",
+                       help="Template file (default: template.xml)")
+    
+    args = parser.parse_args()
+    
+    if not args.all and not args.store:
+        parser.print_help()
+        sys.exit(1)
+    
+    # Initialize generator
+    generator = StoreConfigGenerator(args.mapping, args.template)
+    
+    try:
+        if args.all:
+            if args.combined:
+                print("🚀 Generating combined configuration for all stores...")
+                generated_files = generator.generate_all_stores(args.output, combined=True)
+                print(f"\n📁 Generated combined file: {generated_files[0]}")
+            else:
+                print("🚀 Generating separate configurations for all stores...")
+                generated_files = generator.generate_all_stores(args.output, combined=False)
+                print("\n📁 Generated files:")
+                for file_path in generated_files:
+                    print(f"   {file_path}")
+                
+        elif args.store:
+            print(f"🚀 Generating configuration for store {args.store}...")
+            output_file = generator.save_store_config(args.store, args.output)
+            
+            print(f"\n📁 Generated file: {output_file}")
+        
+        print("\n✅ Configuration generation completed successfully!")
+        
+    except Exception as e:
+        print(f"\n❌ Error: {e}")
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()
