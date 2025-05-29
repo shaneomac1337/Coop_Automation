@@ -69,7 +69,26 @@ The key feature is the addition of wall configuration changes to the CSE-wdm nod
     <change file="wall-config.xml" url="wall-config.walls.2.clientId" value="192.168.99.102"/>
     <change file="wall-config.xml" url="wall-config.walls.3.clientId" value="192.168.99.103"/>
     <change file="wall-config.xml" url="wall-config.walls.100.clientId" value="192.168.99.200"/>
+    <change file="web-ui-config.xml" url="webUiConfig.system.serverAddress" value="http://192.168.26.213:8080/app-wdm"/>
 </node>
+```
+
+### Web-UI Configuration Changes
+
+The solution also supports web-ui-config changes based on a simple store IP mapping file (`store_ip_mapping.txt`):
+
+**Format of store_ip_mapping.txt:**
+```
+# Store IP Mapping File
+# Format: StoreID:IPAddress
+9999:192.168.26.213
+1674:10.1.0.20
+1655:192.168.55.100
+```
+
+**Generated web-ui-config change:**
+```xml
+<change file="web-ui-config.xml" url="webUiConfig.system.serverAddress" value="http://192.168.26.213:8080/app-wdm"/>
 ```
 
 ### Wall Types
@@ -141,6 +160,7 @@ Options:
   --output OUTPUT_DIR      Output directory (default: output)
   --mapping MAPPING_FILE   Store mapping file (default: store_wall_mapping.json)
   --template TEMPLATE_FILE Template file (default: template.xml)
+  --ip-mapping IP_FILE     Store IP mapping file for web-ui-config (default: store_ip_mapping.txt)
   --help                   Show help message
 ```
 
@@ -184,8 +204,12 @@ The generated XML files can be imported directly into the store manager applicat
 ## Technical Details
 
 - **Base Template**: `template.xml`
-- **Target Configuration**: `wall-config.xml`
-- **URL Pattern**: `wall-config.walls.X.clientId`
+- **Target Configurations**:
+  - `wall-config.xml` - Wall IP configurations
+  - `web-ui-config.xml` - Web UI server configurations
+- **URL Patterns**:
+  - `wall-config.walls.X.clientId` - Wall configurations
+  - `webUiConfig.system.serverAddress` - Web UI server address
 - **Similar to**: Printer configuration pattern from GKStores example
 
 ## Validation Rules
@@ -198,12 +222,15 @@ The validator checks for:
 - ✅ Valid IP address format
 - ✅ No duplicate IP addresses
 - ✅ Proper CSE-wdm node configuration
+- ✅ Web-UI configuration URL format validation
+- ✅ Server address format (http://ip:8080/app-wdm)
 
 ## Files Generated
 
 ```
 automation/
-├── store_wall_mapping.json              # Store to IP mapping
+├── store_wall_mapping.json              # Store to wall IP mapping (JSON)
+├── store_ip_mapping.txt                 # Store to server IP mapping (simple text)
 ├── template.xml                         # Base structure template
 ├── generate_store_config.py             # Configuration generator
 ├── validate_config.py                   # Configuration validator
@@ -239,11 +266,14 @@ python generate_store_config.py --all --combined
 
 ✅ **Generated 3 store configurations successfully**
 ✅ **Wall configuration changes properly added to CSE-wdm nodes**
+✅ **Web-UI configuration changes added based on IP mapping**
 ✅ **Unique IP addresses assigned per wall per store**
+✅ **Server IP addresses configured for web-ui-config**
 ✅ **Mandatory walls (1, 100) included for all stores**
 ✅ **Optional walls (2, 3) included where specified**
 ✅ **Proper XML structure and formatting**
 ✅ **Template-based approach ensures consistency**
 ✅ **Support for both separate and combined output formats**
+✅ **Dual configuration system (wall + web-ui) working seamlessly**
 
-The solution is ready for production use and can be easily extended for additional stores or modified wall configurations.
+The solution is ready for production use and can be easily extended for additional stores or modified wall configurations. Both wall management and web-UI server configurations are fully automated.

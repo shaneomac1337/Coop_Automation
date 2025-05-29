@@ -120,6 +120,24 @@ class ConfigValidator:
         
         return len(self.errors) == 0
     
+    def validate_webui_configurations(self, root: ET.Element) -> bool:
+        """Validate web-ui-config changes in the XML."""
+        webui_changes = root.findall(".//change[@file='web-ui-config.xml']")
+        
+        for change in webui_changes:
+            url = change.get("url", "")
+            value = change.get("value", "")
+            
+            # Check if it's the expected web-ui-config URL
+            if url == "webUiConfig.system.serverAddress":
+                # Validate URL format
+                if not value.startswith("http://") or ":8080/app-wdm" not in value:
+                    self.errors.append(f"Invalid web-ui-config URL format: {value}")
+            else:
+                self.warnings.append(f"Unexpected web-ui-config URL: {url}")
+        
+        return len(self.errors) == 0
+    
     def validate_store_node(self, root: ET.Element) -> bool:
         """Validate store node configuration."""
         store_nodes = root.findall(".//node[@alias='GKR-Store']")
@@ -188,6 +206,7 @@ class ConfigValidator:
         self.validate_systems(root)
         self.validate_store_node(root)
         self.validate_wall_configurations(root)
+        self.validate_webui_configurations(root)
         
         is_valid = len(self.errors) == 0
         

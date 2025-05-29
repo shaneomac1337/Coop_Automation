@@ -31,6 +31,7 @@
                 <change file="wall-config.xml" url="wall-config.walls.2.clientId" value="192.168.99.102"/>
                 <change file="wall-config.xml" url="wall-config.walls.3.clientId" value="192.168.99.103"/>
                 <change file="wall-config.xml" url="wall-config.walls.100.clientId" value="192.168.99.200"/>
+                <change file="web-ui-config.xml" url="webUiConfig.system.serverAddress" value="http://192.168.26.213:8080/app-wdm"/>
             </node>
             <node alias="GKR-Customer-Profile-Service-store" country="SE" name="CPS Store" unique-name="9999.CPS_STORE"/>
             <node alias="GKR-Basket-Service-store" country="SE" name="BS Store" unique-name="9999.BS_STORE"/>
