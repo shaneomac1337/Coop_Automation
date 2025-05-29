@@ -1,0 +1,29 @@
+Okay - so I am automating a solution to properly import a configuration to our store manager application.
+
+I have already prepared a example import file which I have prepared in the past but it was for different customer so we should just use it as a knowledge base.
+
+Please take a look on a structure installation test store and also the GKStores config
+GKStoresconfig is the example i have used for another customer.
+
+For this customer, we will have the basee import file from the Structure installation test - it's little bit more simple now without HybridInfoservers
+
+But similarily as we did for the GKStores we will have to modify the WDM configuration.
+
+that's the similar operation as this:
+
+				
+				
+
+In our case we will be changing the wall configs for wdm
+wall-config.walls.1.clientId= there will be an ip address
+there will be maximum of 
+wall-config.walls.1.clientId={ip_address}
+wall-config.walls.2.clientId={ip_address}
+wall-config.walls.3.clientId={ip_address}
+wall-config.walls.100.clientId={ip_address}
+
+and all of those walls should get the IP address
+The ip address we will be getting from external source file, but I still did not have an example, so we can maybe also build it
+
+We will have to use some mapping because there will be multiple stores like 9999, 1674, 1655
+my example for import i provided with 9999
