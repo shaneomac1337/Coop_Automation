@@ -75,11 +75,11 @@ The key feature is the addition of wall configuration changes to the CSE-wdm nod
 
 ### Web-UI Configuration Changes
 
-The solution also supports web-ui-config changes based on a simple store IP mapping file (`store_ip_mapping.txt`):
+The solution also supports web-ui-config changes based on a simple store IP mapping properties file (`store_ip_mapping.properties`):
 
-**Format of store_ip_mapping.txt:**
+**Format of store_ip_mapping.properties:**
 ```
-# Store IP Mapping File
+# Store IP Mapping Properties File
 # Format: StoreID:IPAddress
 9999:192.168.26.213
 1674:10.1.0.20
@@ -160,7 +160,7 @@ Options:
   --output OUTPUT_DIR      Output directory (default: output)
   --mapping MAPPING_FILE   Store mapping file (default: store_wall_mapping.json)
   --template TEMPLATE_FILE Template file (default: template.xml)
-  --ip-mapping IP_FILE     Store IP mapping file for web-ui-config (default: store_ip_mapping.txt)
+  --ip-mapping IP_FILE     Store IP mapping file for web-ui-config (default: store_ip_mapping.properties)
   --help                   Show help message
 ```
 
@@ -230,7 +230,7 @@ The validator checks for:
 ```
 automation/
 ├── store_wall_mapping.json              # Store to wall IP mapping (JSON)
-├── store_ip_mapping.txt                 # Store to server IP mapping (simple text)
+├── store_ip_mapping.properties          # Store to server IP mapping (properties format)
 ├── template.xml                         # Base structure template
 ├── generate_store_config.py             # Configuration generator
 ├── validate_config.py                   # Configuration validator

@@ -146,24 +146,29 @@ class ConfigValidator:
             self.errors.append("No store node found")
             return False
         
-        if len(store_nodes) > 1:
-            self.errors.append("Multiple store nodes found")
-            return False
+        # For combined configurations, multiple store nodes are expected
+        # For individual configurations, only one store node should exist
+        is_combined = len(store_nodes) > 1
         
-        store_node = store_nodes[0]
+        if is_combined:
+            print(f"   📦 Detected combined configuration with {len(store_nodes)} stores")
         
-        # Check required attributes
-        required_attrs = ["country", "name", "rsid", "unique-name"]
-        for attr in required_attrs:
-            if not store_node.get(attr):
-                self.errors.append(f"Store node missing required attribute: {attr}")
-        
-        # Check for CSE-wdm node
-        wdm_nodes = store_node.findall(".//node[@alias='CSE-wdm']")
-        if not wdm_nodes:
-            self.errors.append("No CSE-wdm node found in store")
-        elif len(wdm_nodes) > 1:
-            self.warnings.append("Multiple CSE-wdm nodes found")
+        # Validate each store node individually
+        for i, store_node in enumerate(store_nodes):
+            store_id = store_node.get("rsid", f"store_{i}")
+            
+            # Check required attributes
+            required_attrs = ["country", "name", "rsid", "unique-name"]
+            for attr in required_attrs:
+                if not store_node.get(attr):
+                    self.errors.append(f"Store node {store_id} missing required attribute: {attr}")
+            
+            # Check for CSE-wdm node
+            wdm_nodes = store_node.findall(".//node[@alias='CSE-wdm']")
+            if not wdm_nodes:
+                self.errors.append(f"No CSE-wdm node found in store {store_id}")
+            elif len(wdm_nodes) > 1:
+                self.warnings.append(f"Multiple CSE-wdm nodes found in store {store_id}")
         
         return len(self.errors) == 0
     
