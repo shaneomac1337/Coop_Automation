@@ -27,7 +27,7 @@ class StoreConfigGenerator:
     
     def __init__(self, mapping_file: str = "store_wall_mapping.json",
                  template_file: str = "template.xml",
-                 ip_mapping_file: str = "store_ip_mapping.txt"):
+                 ip_mapping_file: str = "store_ip_mapping.properties"):
         self.mapping_file = mapping_file
         self.template_file = template_file
         self.ip_mapping_file = ip_mapping_file
@@ -66,7 +66,7 @@ class StoreConfigGenerator:
             sys.exit(1)
     
     def load_store_ip_mapping(self) -> Dict[str, str]:
-        """Load the simple store IP mapping file."""
+        """Load the store IP mapping properties file."""
         try:
             store_ip_mapping = {}
             
@@ -75,7 +75,7 @@ class StoreConfigGenerator:
                     line = line.strip()
                     
                     # Skip empty lines and comments
-                    if not line or line.startswith('#'):
+                    if not line or line.startswith('#') or line.startswith('!'):
                         continue
                     
                     # Parse store_id:ip_address format
@@ -436,8 +436,8 @@ Examples:
     parser.add_argument("--template", type=str,
                        default="template.xml",
                        help="Template file (default: template.xml)")
-    parser.add_argument("--ip-mapping", type=str, default="store_ip_mapping.txt",
-                       help="Store IP mapping file for web-ui-config (default: store_ip_mapping.txt)")
+    parser.add_argument("--ip-mapping", type=str, default="store_ip_mapping.properties",
+                       help="Store IP mapping file for web-ui-config (default: store_ip_mapping.properties)")
     
     args = parser.parse_args()
     
