@@ -19,7 +19,39 @@ import argparse
 import sys
 from pathlib import Path
 import ipaddress
+import re
 from typing import Dict, List, Any, Optional
+
+
+def normalize_identifier(text: str) -> str:
+    """
+    Normalize text for use in XML identifiers by replacing Swedish characters
+    and other special characters with ASCII equivalents.
+    """
+    # Swedish character mappings
+    char_map = {
+        'Å': 'A', 'å': 'a',
+        'Ä': 'A', 'ä': 'a',
+        'Ö': 'O', 'ö': 'o',
+        'É': 'E', 'é': 'e',
+        'Ü': 'U', 'ü': 'u'
+    }
+
+    # Replace Swedish characters
+    normalized = text
+    for swedish_char, ascii_char in char_map.items():
+        normalized = normalized.replace(swedish_char, ascii_char)
+
+    # Replace spaces and other special characters with underscores
+    normalized = re.sub(r'[^A-Za-z0-9._-]', '_', normalized)
+
+    # Remove multiple consecutive underscores
+    normalized = re.sub(r'_+', '_', normalized)
+
+    # Remove leading/trailing underscores
+    normalized = normalized.strip('_')
+
+    return normalized
 
 
 class StoreConfigGenerator:
@@ -209,7 +241,7 @@ class StoreConfigGenerator:
         store_node.set("name", store_data["name"])
         store_node.set("parent-node-ident", store_data["parent_node"])
         store_node.set("rsid", store_id)
-        store_node.set("unique-name", f"{store_data['parent_node']}.{store_data['name'].upper().replace(' ', '_')}")
+        store_node.set("unique-name", f"{store_data['parent_node']}.{normalize_identifier(store_data['name']).upper()}")
         
         # Add child nodes from template
         if self.template_root is not None:
@@ -344,7 +376,7 @@ class StoreConfigGenerator:
             store_node.set("name", store_data["name"])
             store_node.set("parent-node-ident", store_data["parent_node"])
             store_node.set("rsid", store_id)
-            store_node.set("unique-name", f"{store_data['parent_node']}.{store_data['name'].upper().replace(' ', '_')}")
+            store_node.set("unique-name", f"{store_data['parent_node']}.{normalize_identifier(store_data['name']).upper()}")
             
             # Add child nodes from template
             if self.template_root is not None:

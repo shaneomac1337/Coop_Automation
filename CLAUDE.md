@@ -46,12 +46,12 @@ python validate_config.py --directory output --summary
 2. Generator processes mappings against template to create store-specific XML structures
 3. Wall changes are added to CSE-wdm nodes with format: `wall-config.walls.X.clientId`
 4. Web-UI changes are added with format: `webUiConfig.system.serverAddress`
-5. Validator ensures mandatory walls (1, 100), IP format, and XML structure compliance
+5. Validator ensures mandatory walls (1), IP format, and XML structure compliance
 
 ### Wall Types
 - **Wall 1**: Dispensing wall (mandatory)
 - **Walls 2, 3**: Additional dispensing walls (optional)
-- **Wall 100**: Disposal wall (mandatory)
+- **Wall 100**: Disposal wall (optional)
 
 ### Output Modes
 - **Separate files**: Individual XML per store (`store_9999_config.xml`)
@@ -68,7 +68,7 @@ Wall configurations target the CSE-wdm node:
 
 ### Store Mapping Structure
 - Each store requires: name, country, parent_node, walls object
-- Mandatory walls: 1 (dispense) and 100 (disposal)
+- Mandatory walls: 1 (dispense only)
 - IP addresses must be valid IPv4 format
 - Store IDs become rsid attributes in generated XML
 

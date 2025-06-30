@@ -21,64 +21,101 @@
     </time-regimes>
     <central-is/>
     <nodes>
-        <node alias="GKR-Store" country="SE" name="Installation Test Store" parent-node-ident="ENTERPRISE.TENANT.SWEDEN" rsid="9999" unique-name="ENTERPRISE.TENANT.SWEDEN.INSTALLATION_TEST_STORE">
-            <node alias="CSE-sdc-store_SE" country="SE" name="SDC Store" unique-name="9999.SDC_STORE"/>
-            <node alias="CSE-pos-server-STORE_SE" country="SE" name="POS Server Store" unique-name="9999.POS_SERVER_STORE"/>
-            <node alias="GKR-mwb-store" country="SE" name="MWB Store" unique-name="9999.MWB_STORE"/>
-            <node alias="CSE-lps-store" country="SE" name="LPS Store" unique-name="9999.LPS_STORE"/>
-            <node alias="CSE-wdm" country="SE" name="WDM" unique-name="9999.WDM">
-                <change file="wall-config.xml" url="wall-config.walls.1.clientId" value="192.168.99.101"/>
-                <change file="wall-config.xml" url="wall-config.walls.2.clientId" value="192.168.99.102"/>
-                <change file="wall-config.xml" url="wall-config.walls.3.clientId" value="192.168.99.103"/>
-                <change file="wall-config.xml" url="wall-config.walls.100.clientId" value="192.168.99.200"/>
-                <change file="web-ui-config.xml" url="webUiConfig.system.serverAddress" value="http://192.168.26.213:8080/app-wdm"/>
+        <node alias="GKR-Store" country="SE" name="Östra - 1161 Coop Krokek" parent-node-ident="ENTERPRISE.TENANT.SWEDEN" rsid="1161" unique-name="ENTERPRISE.TENANT.SWEDEN.OSTRA_-_1161_COOP_KROKEK">
+            <node alias="CSE-sdc-store_SE" country="SE" name="SDC Store" unique-name="1161.SDC_STORE"/>
+            <node alias="CSE-pos-server-STORE_SE" country="SE" name="POS Server Store" unique-name="1161.POS_SERVER_STORE"/>
+            <node alias="GKR-mwb-store" country="SE" name="MWB Store" unique-name="1161.MWB_STORE"/>
+            <node alias="CSE-lps-store" country="SE" name="LPS Store" unique-name="1161.LPS_STORE"/>
+            <node alias="CSE-wdm" country="SE" name="WDM" unique-name="1161.WDM">
+                <change file="wall-config.xml" url="wall-config.walls.1.clientId" value="10.17.197.30"/>
+                <change file="web-ui-config.xml" url="webUiConfig.system.serverAddress" value="http://10.17.197.30:8080/app-wdm"/>
             </node>
-            <node alias="GKR-Customer-Profile-Service-store" country="SE" name="CPS Store" unique-name="9999.CPS_STORE"/>
-            <node alias="GKR-Basket-Service-store" country="SE" name="BS Store" unique-name="9999.BS_STORE"/>
-            <node alias="GKR-Checkout-Service-store" country="SE" name="CS Store" unique-name="9999.CS_STORE"/>
-            <node alias="GKR-Fraud-Detection-Service-store" country="SE" name="FDS Store" unique-name="9999.FDS_STORE"/>
-            <node alias="GKR-Gate-Service-store" country="SE" name="GS Store" unique-name="9999.GS_STORE"/>
-            <node alias="GKR-Item-Registration-Service-store" country="SE" name="IRS Store" unique-name="9999.IRS_STORE"/>
-            <node alias="GKR-Payment-Service-store" country="SE" name="PS Store" unique-name="9999.PS_STORE"/>
-            <node alias="GKR-Shopping-List-Service-store" country="SE" name="SLS Store" unique-name="9999.SLS_STORE"/>
+            <node alias="GKR-Customer-Profile-Service-store" country="SE" name="CPS Store" unique-name="1161.CPS_STORE"/>
+            <node alias="GKR-Basket-Service-store" country="SE" name="BS Store" unique-name="1161.BS_STORE"/>
+            <node alias="GKR-Checkout-Service-store" country="SE" name="CS Store" unique-name="1161.CS_STORE"/>
+            <node alias="GKR-Fraud-Detection-Service-store" country="SE" name="FDS Store" unique-name="1161.FDS_STORE"/>
+            <node alias="GKR-Gate-Service-store" country="SE" name="GS Store" unique-name="1161.GS_STORE"/>
+            <node alias="GKR-Item-Registration-Service-store" country="SE" name="IRS Store" unique-name="1161.IRS_STORE"/>
+            <node alias="GKR-Payment-Service-store" country="SE" name="PS Store" unique-name="1161.PS_STORE"/>
+            <node alias="GKR-Shopping-List-Service-store" country="SE" name="SLS Store" unique-name="1161.SLS_STORE"/>
         </node>
-        <node alias="GKR-Store" country="SE" name="Store 1674" parent-node-ident="ENTERPRISE.TENANT.SWEDEN" rsid="1674" unique-name="ENTERPRISE.TENANT.SWEDEN.STORE_1674">
-            <node alias="CSE-sdc-store_SE" country="SE" name="SDC Store" unique-name="1674.SDC_STORE"/>
-            <node alias="CSE-pos-server-STORE_SE" country="SE" name="POS Server Store" unique-name="1674.POS_SERVER_STORE"/>
-            <node alias="GKR-mwb-store" country="SE" name="MWB Store" unique-name="1674.MWB_STORE"/>
-            <node alias="CSE-lps-store" country="SE" name="LPS Store" unique-name="1674.LPS_STORE"/>
-            <node alias="CSE-wdm" country="SE" name="WDM" unique-name="1674.WDM">
-                <change file="wall-config.xml" url="wall-config.walls.1.clientId" value="192.168.74.101"/>
-                <change file="wall-config.xml" url="wall-config.walls.100.clientId" value="192.168.74.200"/>
-                <change file="web-ui-config.xml" url="webUiConfig.system.serverAddress" value="http://10.0.1.4:8080/app-wdm"/>
+        <node alias="GKR-Store" country="SE" name="Östra - 1038 Coop Hammarby Sjöstad" parent-node-ident="ENTERPRISE.TENANT.SWEDEN" rsid="1038" unique-name="ENTERPRISE.TENANT.SWEDEN.OSTRA_-_1038_COOP_HAMMARBY_SJOSTAD">
+            <node alias="CSE-sdc-store_SE" country="SE" name="SDC Store" unique-name="1038.SDC_STORE"/>
+            <node alias="CSE-pos-server-STORE_SE" country="SE" name="POS Server Store" unique-name="1038.POS_SERVER_STORE"/>
+            <node alias="GKR-mwb-store" country="SE" name="MWB Store" unique-name="1038.MWB_STORE"/>
+            <node alias="CSE-lps-store" country="SE" name="LPS Store" unique-name="1038.LPS_STORE"/>
+            <node alias="CSE-wdm" country="SE" name="WDM" unique-name="1038.WDM">
+                <change file="wall-config.xml" url="wall-config.walls.1.clientId" value="10.31.99.32"/>
+                <change file="wall-config.xml" url="wall-config.walls.100.clientId" value="10.31.99.31"/>
+                <change file="web-ui-config.xml" url="webUiConfig.system.serverAddress" value="http://10.31.99.32:8080/app-wdm"/>
             </node>
-            <node alias="GKR-Customer-Profile-Service-store" country="SE" name="CPS Store" unique-name="1674.CPS_STORE"/>
-            <node alias="GKR-Basket-Service-store" country="SE" name="BS Store" unique-name="1674.BS_STORE"/>
-            <node alias="GKR-Checkout-Service-store" country="SE" name="CS Store" unique-name="1674.CS_STORE"/>
-            <node alias="GKR-Fraud-Detection-Service-store" country="SE" name="FDS Store" unique-name="1674.FDS_STORE"/>
-            <node alias="GKR-Gate-Service-store" country="SE" name="GS Store" unique-name="1674.GS_STORE"/>
-            <node alias="GKR-Item-Registration-Service-store" country="SE" name="IRS Store" unique-name="1674.IRS_STORE"/>
-            <node alias="GKR-Payment-Service-store" country="SE" name="PS Store" unique-name="1674.PS_STORE"/>
-            <node alias="GKR-Shopping-List-Service-store" country="SE" name="SLS Store" unique-name="1674.SLS_STORE"/>
+            <node alias="GKR-Customer-Profile-Service-store" country="SE" name="CPS Store" unique-name="1038.CPS_STORE"/>
+            <node alias="GKR-Basket-Service-store" country="SE" name="BS Store" unique-name="1038.BS_STORE"/>
+            <node alias="GKR-Checkout-Service-store" country="SE" name="CS Store" unique-name="1038.CS_STORE"/>
+            <node alias="GKR-Fraud-Detection-Service-store" country="SE" name="FDS Store" unique-name="1038.FDS_STORE"/>
+            <node alias="GKR-Gate-Service-store" country="SE" name="GS Store" unique-name="1038.GS_STORE"/>
+            <node alias="GKR-Item-Registration-Service-store" country="SE" name="IRS Store" unique-name="1038.IRS_STORE"/>
+            <node alias="GKR-Payment-Service-store" country="SE" name="PS Store" unique-name="1038.PS_STORE"/>
+            <node alias="GKR-Shopping-List-Service-store" country="SE" name="SLS Store" unique-name="1038.SLS_STORE"/>
         </node>
-        <node alias="GKR-Store" country="SE" name="Store 1655" parent-node-ident="ENTERPRISE.TENANT.SWEDEN" rsid="1655" unique-name="ENTERPRISE.TENANT.SWEDEN.STORE_1655">
-            <node alias="CSE-sdc-store_SE" country="SE" name="SDC Store" unique-name="1655.SDC_STORE"/>
-            <node alias="CSE-pos-server-STORE_SE" country="SE" name="POS Server Store" unique-name="1655.POS_SERVER_STORE"/>
-            <node alias="GKR-mwb-store" country="SE" name="MWB Store" unique-name="1655.MWB_STORE"/>
-            <node alias="CSE-lps-store" country="SE" name="LPS Store" unique-name="1655.LPS_STORE"/>
-            <node alias="CSE-wdm" country="SE" name="WDM" unique-name="1655.WDM">
-                <change file="wall-config.xml" url="wall-config.walls.1.clientId" value="192.168.55.101"/>
-                <change file="wall-config.xml" url="wall-config.walls.2.clientId" value="192.168.55.102"/>
-                <change file="wall-config.xml" url="wall-config.walls.100.clientId" value="192.168.55.200"/>
+        <node alias="GKR-Store" country="SE" name="Väst - 1346 Coop Mellerud" parent-node-ident="ENTERPRISE.TENANT.SWEDEN" rsid="1346" unique-name="ENTERPRISE.TENANT.SWEDEN.VAST_-_1346_COOP_MELLERUD">
+            <node alias="CSE-sdc-store_SE" country="SE" name="SDC Store" unique-name="1346.SDC_STORE"/>
+            <node alias="CSE-pos-server-STORE_SE" country="SE" name="POS Server Store" unique-name="1346.POS_SERVER_STORE"/>
+            <node alias="GKR-mwb-store" country="SE" name="MWB Store" unique-name="1346.MWB_STORE"/>
+            <node alias="CSE-lps-store" country="SE" name="LPS Store" unique-name="1346.LPS_STORE"/>
+            <node alias="CSE-wdm" country="SE" name="WDM" unique-name="1346.WDM">
+                <change file="wall-config.xml" url="wall-config.walls.1.clientId" value="10.23.131.22"/>
+                <change file="wall-config.xml" url="wall-config.walls.2.clientId" value="10.23.131.21"/>
+                <change file="wall-config.xml" url="wall-config.walls.100.clientId" value="10.23.131.23"/>
+                <change file="web-ui-config.xml" url="webUiConfig.system.serverAddress" value="http://10.23.131.22:8080/app-wdm"/>
             </node>
-            <node alias="GKR-Customer-Profile-Service-store" country="SE" name="CPS Store" unique-name="1655.CPS_STORE"/>
-            <node alias="GKR-Basket-Service-store" country="SE" name="BS Store" unique-name="1655.BS_STORE"/>
-            <node alias="GKR-Checkout-Service-store" country="SE" name="CS Store" unique-name="1655.CS_STORE"/>
-            <node alias="GKR-Fraud-Detection-Service-store" country="SE" name="FDS Store" unique-name="1655.FDS_STORE"/>
-            <node alias="GKR-Gate-Service-store" country="SE" name="GS Store" unique-name="1655.GS_STORE"/>
-            <node alias="GKR-Item-Registration-Service-store" country="SE" name="IRS Store" unique-name="1655.IRS_STORE"/>
-            <node alias="GKR-Payment-Service-store" country="SE" name="PS Store" unique-name="1655.PS_STORE"/>
-            <node alias="GKR-Shopping-List-Service-store" country="SE" name="SLS Store" unique-name="1655.SLS_STORE"/>
+            <node alias="GKR-Customer-Profile-Service-store" country="SE" name="CPS Store" unique-name="1346.CPS_STORE"/>
+            <node alias="GKR-Basket-Service-store" country="SE" name="BS Store" unique-name="1346.BS_STORE"/>
+            <node alias="GKR-Checkout-Service-store" country="SE" name="CS Store" unique-name="1346.CS_STORE"/>
+            <node alias="GKR-Fraud-Detection-Service-store" country="SE" name="FDS Store" unique-name="1346.FDS_STORE"/>
+            <node alias="GKR-Gate-Service-store" country="SE" name="GS Store" unique-name="1346.GS_STORE"/>
+            <node alias="GKR-Item-Registration-Service-store" country="SE" name="IRS Store" unique-name="1346.IRS_STORE"/>
+            <node alias="GKR-Payment-Service-store" country="SE" name="PS Store" unique-name="1346.PS_STORE"/>
+            <node alias="GKR-Shopping-List-Service-store" country="SE" name="SLS Store" unique-name="1346.SLS_STORE"/>
+        </node>
+        <node alias="GKR-Store" country="SE" name="Östra - 1828 Stora Coop Spånga" parent-node-ident="ENTERPRISE.TENANT.SWEDEN" rsid="1828" unique-name="ENTERPRISE.TENANT.SWEDEN.OSTRA_-_1828_STORA_COOP_SPANGA">
+            <node alias="CSE-sdc-store_SE" country="SE" name="SDC Store" unique-name="1828.SDC_STORE"/>
+            <node alias="CSE-pos-server-STORE_SE" country="SE" name="POS Server Store" unique-name="1828.POS_SERVER_STORE"/>
+            <node alias="GKR-mwb-store" country="SE" name="MWB Store" unique-name="1828.MWB_STORE"/>
+            <node alias="CSE-lps-store" country="SE" name="LPS Store" unique-name="1828.LPS_STORE"/>
+            <node alias="CSE-wdm" country="SE" name="WDM" unique-name="1828.WDM">
+                <change file="wall-config.xml" url="wall-config.walls.1.clientId" value="10.30.115.31"/>
+                <change file="wall-config.xml" url="wall-config.walls.2.clientId" value="10.30.115.30"/>
+                <change file="wall-config.xml" url="wall-config.walls.100.clientId" value="10.30.115.32"/>
+                <change file="web-ui-config.xml" url="webUiConfig.system.serverAddress" value="http://10.30.115.31:8080/app-wdm"/>
+            </node>
+            <node alias="GKR-Customer-Profile-Service-store" country="SE" name="CPS Store" unique-name="1828.CPS_STORE"/>
+            <node alias="GKR-Basket-Service-store" country="SE" name="BS Store" unique-name="1828.BS_STORE"/>
+            <node alias="GKR-Checkout-Service-store" country="SE" name="CS Store" unique-name="1828.CS_STORE"/>
+            <node alias="GKR-Fraud-Detection-Service-store" country="SE" name="FDS Store" unique-name="1828.FDS_STORE"/>
+            <node alias="GKR-Gate-Service-store" country="SE" name="GS Store" unique-name="1828.GS_STORE"/>
+            <node alias="GKR-Item-Registration-Service-store" country="SE" name="IRS Store" unique-name="1828.IRS_STORE"/>
+            <node alias="GKR-Payment-Service-store" country="SE" name="PS Store" unique-name="1828.PS_STORE"/>
+            <node alias="GKR-Shopping-List-Service-store" country="SE" name="SLS Store" unique-name="1828.SLS_STORE"/>
+        </node>
+        <node alias="GKR-Store" country="SE" name="Mitt - 1677 Coop Forum Marieberg" parent-node-ident="ENTERPRISE.TENANT.SWEDEN" rsid="1677" unique-name="ENTERPRISE.TENANT.SWEDEN.MITT_-_1677_COOP_FORUM_MARIEBERG">
+            <node alias="CSE-sdc-store_SE" country="SE" name="SDC Store" unique-name="1677.SDC_STORE"/>
+            <node alias="CSE-pos-server-STORE_SE" country="SE" name="POS Server Store" unique-name="1677.POS_SERVER_STORE"/>
+            <node alias="GKR-mwb-store" country="SE" name="MWB Store" unique-name="1677.MWB_STORE"/>
+            <node alias="CSE-lps-store" country="SE" name="LPS Store" unique-name="1677.LPS_STORE"/>
+            <node alias="CSE-wdm" country="SE" name="WDM" unique-name="1677.WDM">
+                <change file="wall-config.xml" url="wall-config.walls.1.clientId" value="10.30.219.31"/>
+                <change file="wall-config.xml" url="wall-config.walls.100.clientId" value="10.30.219.33"/>
+                <change file="web-ui-config.xml" url="webUiConfig.system.serverAddress" value="http://10.30.219.31:8080/app-wdm"/>
+            </node>
+            <node alias="GKR-Customer-Profile-Service-store" country="SE" name="CPS Store" unique-name="1677.CPS_STORE"/>
+            <node alias="GKR-Basket-Service-store" country="SE" name="BS Store" unique-name="1677.BS_STORE"/>
+            <node alias="GKR-Checkout-Service-store" country="SE" name="CS Store" unique-name="1677.CS_STORE"/>
+            <node alias="GKR-Fraud-Detection-Service-store" country="SE" name="FDS Store" unique-name="1677.FDS_STORE"/>
+            <node alias="GKR-Gate-Service-store" country="SE" name="GS Store" unique-name="1677.GS_STORE"/>
+            <node alias="GKR-Item-Registration-Service-store" country="SE" name="IRS Store" unique-name="1677.IRS_STORE"/>
+            <node alias="GKR-Payment-Service-store" country="SE" name="PS Store" unique-name="1677.PS_STORE"/>
+            <node alias="GKR-Shopping-List-Service-store" country="SE" name="SLS Store" unique-name="1677.SLS_STORE"/>
         </node>
     </nodes>
 </structure>

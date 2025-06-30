@@ -74,7 +74,7 @@ class ConfigValidator:
         
         # Track wall IDs and IP addresses
         wall_ips: Dict[str, str] = {}
-        mandatory_walls: Set[str] = {"1", "100"}
+        mandatory_walls: Set[str] = {"1"}
         found_walls: Set[str] = set()
         
         for change in wall_changes:

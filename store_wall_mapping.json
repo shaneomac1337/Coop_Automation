@@ -3,43 +3,60 @@
     "description": "Store to wall IP address mapping for WDM configuration",
     "version": "1.0",
     "created": "2025-05-29",
-    "mandatory_walls": [1, 100],
+    "mandatory_walls": [1],
     "wall_types": {
       "1": "WALL_TYPE_1 (Dispensing)",
-      "2": "WALL_TYPE_1 (Dispensing)", 
+      "2": "WALL_TYPE_1 (Dispensing)",
       "3": "WALL_TYPE_1 (Dispensing)",
       "100": "WALL_TYPE_DISPOSAL (Disposal)"
     }
   },
   "stores": {
-    "9999": {
-      "name": "Installation Test Store",
+
+    "1161": {
+      "name": "Östra - 1161 Coop Krokek",
       "country": "SE",
       "parent_node": "ENTERPRISE.TENANT.SWEDEN",
       "walls": {
-        "1": "192.168.99.101",
-        "2": "192.168.99.102", 
-        "3": "192.168.99.103",
-        "100": "192.168.99.200"
+        "1": "10.17.197.30"
       }
     },
-    "1674": {
-      "name": "Store 1674",
-      "country": "SE",
-      "parent_node": "ENTERPRISE.TENANT.SWEDEN", 
-      "walls": {
-        "1": "192.168.74.101",
-        "100": "192.168.74.200"
-      }
-    },
-    "1655": {
-      "name": "Store 1655",
+    "1038": {
+      "name": "Östra - 1038 Coop Hammarby Sjöstad",
       "country": "SE",
       "parent_node": "ENTERPRISE.TENANT.SWEDEN",
       "walls": {
-        "1": "192.168.55.101",
-        "2": "192.168.55.102",
-        "100": "192.168.55.200"
+        "1": "10.31.99.32",
+        "100": "10.31.99.31"
+      }
+    },
+    "1346": {
+      "name": "Väst - 1346 Coop Mellerud",
+      "country": "SE",
+      "parent_node": "ENTERPRISE.TENANT.SWEDEN",
+      "walls": {
+        "1": "10.23.131.22",
+        "2": "10.23.131.21",
+        "100": "10.23.131.23"
+      }
+    },
+    "1828": {
+      "name": "Östra - 1828 Stora Coop Spånga",
+      "country": "SE",
+      "parent_node": "ENTERPRISE.TENANT.SWEDEN",
+      "walls": {
+        "1": "10.30.115.31",
+        "2": "10.30.115.30",
+        "100": "10.30.115.32"
+      }
+    },
+    "1677": {
+      "name": "Mitt - 1677 Coop Forum Marieberg",
+      "country": "SE",
+      "parent_node": "ENTERPRISE.TENANT.SWEDEN",
+      "walls": {
+        "1": "10.30.219.31",
+        "100": "10.30.219.33"
       }
     }
   }

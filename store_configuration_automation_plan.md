@@ -14,7 +14,7 @@ This document outlines the detailed plan for automating the configuration import
 - Modify WDM configuration similar to printer configuration approach
 - Support multiple stores: 9999, 1674, 1655
 - Each wall gets unique IP address
-- Mandatory walls: 1 (dispense) and 100 (disposal)
+- Mandatory walls: 1 (dispense only)
 - Optional walls: 2, 3, etc.
 - Support web-ui-config.xml changes for server address configuration
 - Use simple store IP mapping for web-UI server addresses
@@ -30,7 +30,7 @@ This document outlines the detailed plan for automating the configuration import
     "description": "Store to wall IP address mapping for WDM configuration",
     "version": "1.0",
     "created": "2025-05-29",
-    "mandatory_walls": [1, 100],
+    "mandatory_walls": [1],
     "wall_types": {
       "1": "WALL_TYPE_1 (Dispensing)",
       "2": "WALL_TYPE_1 (Dispensing)", 
@@ -162,7 +162,7 @@ automation/
 - XML schema validation
 - IP address format validation (IPv4)
 - Store ID uniqueness
-- Mandatory wall presence (1 and 100)
+- Mandatory wall presence (1 only)
 - Wall ID consistency
 - XPath syntax validation
 
