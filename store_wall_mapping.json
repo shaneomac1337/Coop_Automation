@@ -61,21 +61,21 @@
       }
     },
     "1681": {
-      "name": "1681 Stora Coop Lund",
+      "name": "Lund",
       "country": "SE",
       "parent_node": "ENTERPRISE.TENANT.SWEDEN",
       "skip_wdm": true,
       "walls": {}
     },
     "1664": {
-      "name": "1664 Stora Coop Bromma",
+      "name": "Bromma",
       "country": "SE",
       "parent_node": "ENTERPRISE.TENANT.SWEDEN",
       "skip_wdm": true,
       "walls": {}
     },
     "4280": {
-      "name": "4280 Xtra Aspudden",
+      "name": "Xtra Aspudden",
       "country": "SE",
       "parent_node": "ENTERPRISE.TENANT.SWEDEN",
       "skip_wdm": true,
