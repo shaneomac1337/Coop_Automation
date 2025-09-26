@@ -197,6 +197,8 @@ Example:
 }
 ```
 
+For stores that should keep the template unchanged (no WDM or web UI changes), set `"skip_wdm": true` and omit the `walls` block (or leave it empty).
+
 ## Integration with Store Manager
 
 The generated XML files can be imported directly into the store manager application, similar to how the GKStores configurations were imported. The wall configuration changes will be applied to the target `wall-config.xml` file during import.

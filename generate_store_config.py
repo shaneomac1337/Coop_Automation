@@ -75,12 +75,18 @@ class StoreConfigGenerator:
             
             # Validate mandatory walls
             if self.store_mapping and 'metadata' in self.store_mapping:
-                mandatory_walls = self.store_mapping['metadata']['mandatory_walls']
+                mandatory_walls = self.store_mapping['metadata'].get('mandatory_walls', [])
                 for store_id, store_data in self.store_mapping['stores'].items():
+                    if store_data.get('skip_wdm', False):
+                        continue
+                    walls = store_data.get('walls')
+                    if walls is None:
+                        raise ValueError(f"Store {store_id} missing 'walls' definition")
+                    if not isinstance(walls, dict):
+                        raise ValueError(f"Store {store_id} has invalid walls definition (expected object)")
                     for wall_id in mandatory_walls:
-                        if str(wall_id) not in store_data['walls']:
+                        if str(wall_id) not in walls:
                             raise ValueError(f"Store {store_id} missing mandatory wall {wall_id}")
-            
             if self.store_mapping is not None:
                 print(f"✓ Loaded mapping for {len(self.store_mapping['stores'])} stores")
                 return self.store_mapping
@@ -163,45 +169,58 @@ class StoreConfigGenerator:
         except ipaddress.AddressValueError:
             return False
     
-    def generate_wall_changes(self, store_id: str, walls: Dict[str, str]) -> List[ET.Element]:
+    def generate_wall_changes(self, store_id: str, store_data: Dict[str, Any]) -> List[ET.Element]:
         """Generate wall configuration change elements for a store."""
+        if store_data.get("skip_wdm", False):
+            print(f"   Skipping wall changes for store {store_id} (skip_wdm set)")
+            return []
+
+        walls = store_data.get("walls") or {}
+        if not walls:
+            raise ValueError(f"No wall definitions found for store {store_id}")
+
         changes: List[ET.Element] = []
-        
+
         for wall_id, ip_address in walls.items():
             if not self.validate_ip_address(ip_address):
                 raise ValueError(f"Invalid IP address '{ip_address}' for store {store_id}, wall {wall_id}")
-            
+
             change = ET.Element("change")
             change.set("file", "wall-config.xml")
             change.set("url", f"wall-config.walls.{wall_id}.clientId")
             change.set("value", ip_address)
             changes.append(change)
-            
+
         return changes
-    
-    def generate_webui_changes(self, store_id: str) -> List[ET.Element]:
+
+    def generate_webui_changes(self, store_id: str, store_data: Dict[str, Any]) -> List[ET.Element]:
         """Generate web-ui-config changes for a store based on IP mapping."""
+        if store_data.get("skip_wdm", False) or store_data.get("skip_webui", False):
+            reason = "skip_wdm set" if store_data.get("skip_wdm", False) else "skip_webui set"
+            print(f"   Skipping web-ui-config change for store {store_id} ({reason})")
+            return []
+
         changes: List[ET.Element] = []
-        
+
         # Load IP mapping if not already loaded
         if self.store_ip_mapping is None:
             self.load_store_ip_mapping()
-        
+
         # Check if store has IP mapping
         if self.store_ip_mapping and store_id in self.store_ip_mapping:
             ip_address = self.store_ip_mapping[store_id]
-            
+
             # Create web-ui-config change
             change = ET.Element("change")
             change.set("file", "web-ui-config.xml")
             change.set("url", "webUiConfig.system.serverAddress")
             change.set("value", f"http://{ip_address}:8080/app-wdm")
             changes.append(change)
-            
+
             print(f"   Added web-ui-config change for store {store_id}: http://{ip_address}:8080/app-wdm")
-        
+
         return changes
-    
+
     def create_store_structure(self, store_id: str, store_data: Dict[str, Any]) -> ET.Element:
         """Create a complete store structure based on template."""
         # Create a deep copy of the template
@@ -258,12 +277,12 @@ class StoreConfigGenerator:
                         
                         # Add wall changes to CSE-wdm node
                         if new_child.get("alias") == "CSE-wdm":
-                            wall_changes = self.generate_wall_changes(store_id, store_data["walls"])
+                            wall_changes = self.generate_wall_changes(store_id, store_data)
                             for change in wall_changes:
                                 new_child.append(change)
                             
                             # Add web-ui-config changes to CSE-wdm node
-                            webui_changes = self.generate_webui_changes(store_id)
+                            webui_changes = self.generate_webui_changes(store_id, store_data)
                             for change in webui_changes:
                                 new_child.append(change)
                         
@@ -393,12 +412,12 @@ class StoreConfigGenerator:
                             
                             # Add wall changes to CSE-wdm node
                             if new_child.get("alias") == "CSE-wdm":
-                                wall_changes = self.generate_wall_changes(store_id, store_data["walls"])
+                                wall_changes = self.generate_wall_changes(store_id, store_data)
                                 for change in wall_changes:
                                     new_child.append(change)
                                 
                                 # Add web-ui-config changes to CSE-wdm node
-                                webui_changes = self.generate_webui_changes(store_id)
+                                webui_changes = self.generate_webui_changes(store_id, store_data)
                                 for change in webui_changes:
                                     new_child.append(change)
                             

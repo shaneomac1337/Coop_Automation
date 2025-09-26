@@ -3,7 +3,9 @@
     "description": "Store to wall IP address mapping for WDM configuration",
     "version": "1.0",
     "created": "2025-05-29",
-    "mandatory_walls": [1],
+    "mandatory_walls": [
+      1
+    ],
     "wall_types": {
       "1": "WALL_TYPE_1 (Dispensing)",
       "2": "WALL_TYPE_1 (Dispensing)",
@@ -12,7 +14,6 @@
     }
   },
   "stores": {
-
     "1161": {
       "name": "Östra - 1161 Coop Krokek",
       "country": "SE",
@@ -58,6 +59,27 @@
         "1": "10.30.219.31",
         "100": "10.30.219.33"
       }
+    },
+    "1681": {
+      "name": "1681 Stora Coop Lund",
+      "country": "SE",
+      "parent_node": "ENTERPRISE.TENANT.SWEDEN",
+      "skip_wdm": true,
+      "walls": {}
+    },
+    "1664": {
+      "name": "1664 Stora Coop Bromma",
+      "country": "SE",
+      "parent_node": "ENTERPRISE.TENANT.SWEDEN",
+      "skip_wdm": true,
+      "walls": {}
+    },
+    "4280": {
+      "name": "4280 Xtra Aspudden",
+      "country": "SE",
+      "parent_node": "ENTERPRISE.TENANT.SWEDEN",
+      "skip_wdm": true,
+      "walls": {}
     }
   }
 }
