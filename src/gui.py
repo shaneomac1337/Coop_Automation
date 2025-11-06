@@ -35,7 +35,7 @@ class StoreConfigGUI:
     def __init__(self, root: tk.Tk):
         self.root = root
         self.root.title("Coop Store Configuration Generator")
-        self.root.geometry("1000x800")
+        self.root.geometry("1000x900")
         self.root.resizable(True, True)
         
         # Variables
