@@ -59,13 +59,16 @@ class StoreConfigGenerator:
     
     def __init__(self, mapping_file: str = "store_wall_mapping.json",
                  template_file: str = "template.xml",
-                 ip_mapping_file: str = "store_ip_mapping.properties"):
+                 ip_mapping_file: str = "store_ip_mapping.properties",
+                 service_cards_file: str = "service_cards_mapping.json"):
         self.mapping_file = mapping_file
         self.template_file = template_file
         self.ip_mapping_file = ip_mapping_file
+        self.service_cards_file = service_cards_file
         self.store_mapping: Optional[Dict[str, Any]] = None
         self.template_root: Optional[ET.Element] = None
         self.store_ip_mapping: Optional[Dict[str, str]] = None
+        self.service_cards_mapping: Optional[Dict[str, Any]] = None
         
     def load_store_mapping(self) -> Dict[str, Any]:
         """Load and validate the store mapping JSON file."""
@@ -146,6 +149,33 @@ class StoreConfigGenerator:
             self.store_ip_mapping = {}
             return {}
     
+    def load_service_cards_mapping(self) -> Dict[str, Any]:
+        """Load the service cards mapping JSON file."""
+        try:
+            with open(self.service_cards_file, 'r', encoding='utf-8') as f:
+                self.service_cards_mapping = json.load(f)
+            
+            if self.service_cards_mapping and 'stores' in self.service_cards_mapping:
+                total_stores = len(self.service_cards_mapping['stores'])
+                total_cards = sum(store_data['card_count'] for store_data in self.service_cards_mapping['stores'].values())
+                print(f"✓ Loaded service cards mapping: {total_stores} stores, {total_cards} cards from '{self.service_cards_file}'")
+                return self.service_cards_mapping
+            else:
+                raise ValueError("Invalid service cards mapping structure")
+            
+        except FileNotFoundError:
+            print(f"⚠️  Warning: Service cards file '{self.service_cards_file}' not found - service card changes will be skipped")
+            self.service_cards_mapping = {"stores": {}}
+            return self.service_cards_mapping
+        except json.JSONDecodeError as e:
+            print(f"⚠️  Warning: Invalid JSON in service cards file: {e} - service card changes will be skipped")
+            self.service_cards_mapping = {"stores": {}}
+            return self.service_cards_mapping
+        except Exception as e:
+            print(f"⚠️  Warning: Error loading service cards mapping: {e} - service card changes will be skipped")
+            self.service_cards_mapping = {"stores": {}}
+            return self.service_cards_mapping
+    
     def load_template(self) -> ET.Element:
         """Load the base structure template XML file."""
         try:
@@ -220,7 +250,55 @@ class StoreConfigGenerator:
             print(f"   Added web-ui-config change for store {store_id}: http://{ip_address}:8080/app-wdm")
 
         return changes
+<<<<<<< HEAD
 
+=======
+    
+    def generate_service_card_changes(self, store_id: str) -> List[ET.Element]:
+        """Generate service-cards-config changes for a store based on service cards mapping."""
+        changes: List[ET.Element] = []
+        
+        # Load service cards mapping if not already loaded
+        if self.service_cards_mapping is None:
+            self.load_service_cards_mapping()
+        
+        # Check if store has service cards
+        if self.service_cards_mapping and store_id in self.service_cards_mapping.get('stores', {}):
+            cards = self.service_cards_mapping['stores'][store_id]['cards']
+            
+            for idx, card_number in enumerate(cards):
+                change = ET.Element("change")
+                change.set("file", "service-cards.xml")
+                
+                # First card has no index suffix, subsequent cards have :2, :3, etc.
+                if idx == 0:
+                    change.set("url", "service-cards-config.service-cards.service-card")
+                else:
+                    change.set("url", f"service-cards-config.service-cards.service-card:{idx + 1}")
+                
+                change.set("value", card_number)
+                changes.append(change)
+            
+            print(f"   Added {len(cards)} service card(s) for store {store_id}")
+        
+        return changes
+    
+    def generate_wdm_config_changes(self, store_id: str) -> List[ET.Element]:
+        """Generate wdm-config.properties changes for a store."""
+        changes: List[ET.Element] = []
+        
+        # Create wdm-config.properties change for businessUnitId
+        change = ET.Element("change")
+        change.set("file", "wdm-config.properties")
+        change.set("url", "remote-services.businessUnitId")
+        change.set("value", store_id)
+        changes.append(change)
+        
+        print(f"   Added wdm-config change for store {store_id}: businessUnitId={store_id}")
+        
+        return changes
+    
+>>>>>>> c97cb17 (feat: Add service cards and wdm-config.properties support)
     def create_store_structure(self, store_id: str, store_data: Dict[str, Any]) -> ET.Element:
         """Create a complete store structure based on template."""
         # Create a deep copy of the template
@@ -284,6 +362,16 @@ class StoreConfigGenerator:
                             # Add web-ui-config changes to CSE-wdm node
                             webui_changes = self.generate_webui_changes(store_id, store_data)
                             for change in webui_changes:
+                                new_child.append(change)
+                            
+                            # Add service card changes to CSE-wdm node
+                            service_card_changes = self.generate_service_card_changes(store_id)
+                            for change in service_card_changes:
+                                new_child.append(change)
+                            
+                            # Add wdm-config.properties changes to CSE-wdm node
+                            wdm_config_changes = self.generate_wdm_config_changes(store_id)
+                            for change in wdm_config_changes:
                                 new_child.append(change)
                         
                         store_node.append(new_child)
@@ -420,6 +508,16 @@ class StoreConfigGenerator:
                                 webui_changes = self.generate_webui_changes(store_id, store_data)
                                 for change in webui_changes:
                                     new_child.append(change)
+                                
+                                # Add service card changes to CSE-wdm node
+                                service_card_changes = self.generate_service_card_changes(store_id)
+                                for change in service_card_changes:
+                                    new_child.append(change)
+                                
+                                # Add wdm-config.properties changes to CSE-wdm node
+                                wdm_config_changes = self.generate_wdm_config_changes(store_id)
+                                for change in wdm_config_changes:
+                                    new_child.append(change)
                             
                             store_node.append(new_child)
         
@@ -489,6 +587,8 @@ Examples:
                        help="Template file (default: template.xml)")
     parser.add_argument("--ip-mapping", type=str, default="store_ip_mapping.properties",
                        help="Store IP mapping file for web-ui-config (default: store_ip_mapping.properties)")
+    parser.add_argument("--service-cards", type=str, default="service_cards_mapping.json",
+                       help="Service cards mapping file (default: service_cards_mapping.json)")
     
     args = parser.parse_args()
     
@@ -497,7 +597,7 @@ Examples:
         sys.exit(1)
     
     # Initialize generator
-    generator = StoreConfigGenerator(args.mapping, args.template, args.ip_mapping)
+    generator = StoreConfigGenerator(args.mapping, args.template, args.ip_mapping, args.service_cards)
     
     try:
         if args.all:

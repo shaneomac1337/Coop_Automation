@@ -138,6 +138,50 @@ class ConfigValidator:
         
         return len(self.errors) == 0
     
+    def validate_service_card_configurations(self, root: ET.Element) -> bool:
+        """Validate service-cards-config changes in the XML."""
+        service_card_changes = root.findall(".//change[@file='service-cards.xml']")
+        
+        if not service_card_changes:
+            # Service cards are optional, so just note it
+            return True
+        
+        for change in service_card_changes:
+            url = change.get("url", "")
+            value = change.get("value", "")
+            
+            # Check if it's the expected service-cards-config URL pattern
+            if "service-cards-config.service-cards.service-card" in url:
+                # Validate card number format (should be numeric string)
+                if not value or not value.isdigit():
+                    self.errors.append(f"Invalid service card number: {value}")
+            else:
+                self.warnings.append(f"Unexpected service-cards URL: {url}")
+        
+        return len(self.errors) == 0
+    
+    def validate_wdm_config_configurations(self, root: ET.Element) -> bool:
+        """Validate wdm-config.properties changes in the XML."""
+        wdm_config_changes = root.findall(".//change[@file='wdm-config.properties']")
+        
+        if not wdm_config_changes:
+            self.warnings.append("No wdm-config.properties changes found")
+            return True
+        
+        for change in wdm_config_changes:
+            url = change.get("url", "")
+            value = change.get("value", "")
+            
+            # Check if it's the expected wdm-config URL
+            if url == "remote-services.businessUnitId":
+                # Validate businessUnitId format (should be numeric string)
+                if not value or not value.isdigit():
+                    self.errors.append(f"Invalid businessUnitId: {value}")
+            else:
+                self.warnings.append(f"Unexpected wdm-config URL: {url}")
+        
+        return len(self.errors) == 0
+    
     def validate_store_node(self, root: ET.Element) -> bool:
         """Validate store node configuration."""
         store_nodes = root.findall(".//node[@alias='GKR-Store']")
@@ -212,6 +256,8 @@ class ConfigValidator:
         self.validate_store_node(root)
         self.validate_wall_configurations(root)
         self.validate_webui_configurations(root)
+        self.validate_service_card_configurations(root)
+        self.validate_wdm_config_configurations(root)
         
         is_valid = len(self.errors) == 0
         

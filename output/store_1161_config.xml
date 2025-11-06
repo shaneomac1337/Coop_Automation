@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<structure>
+    <systems>
+        <system alias="GKR-Store" name="GKR-Store"/>
+        <system alias="CSE-sdc-store_SE" name="CSE-sdc-store_SE"/>
+        <system alias="CSE-pos-server-STORE_SE" name="CSE-pos-server-STORE_SE"/>
+        <system alias="GKR-mwb-store" name="GKR-mwb-store"/>
+        <system alias="CSE-lps-store" name="CSE-lps-store"/>
+        <system alias="CSE-wdm" name="CSE-wdm"/>
+        <system alias="GKR-Customer-Profile-Service-store" name="GKR-Customer-Profile-Service-store"/>
+        <system alias="GKR-Basket-Service-store" name="GKR-Basket-Service-store"/>
+        <system alias="GKR-Checkout-Service-store" name="GKR-Checkout-Service-store"/>
+        <system alias="GKR-Fraud-Detection-Service-store" name="GKR-Fraud-Detection-Service-store"/>
+        <system alias="GKR-Gate-Service-store" name="GKR-Gate-Service-store"/>
+        <system alias="GKR-Item-Registration-Service-store" name="GKR-Item-Registration-Service-store"/>
+        <system alias="GKR-Payment-Service-store" name="GKR-Payment-Service-store"/>
+        <system alias="GKR-Shopping-List-Service-store" name="GKR-Shopping-List-Service-store"/>
+    </systems>
+    <time-regimes>
+        <time-windows/>
+    </time-regimes>
+    <central-is/>
+    <nodes>
+        <node alias="GKR-Store" country="SE" name="Östra - 1161 Coop Krokek" parent-node-ident="ENTERPRISE.TENANT.SWEDEN" rsid="1161" unique-name="ENTERPRISE.TENANT.SWEDEN.OSTRA_-_1161_COOP_KROKEK">
+            <node alias="CSE-sdc-store_SE" country="SE" name="SDC Store" unique-name="1161.SDC_STORE"/>
+            <node alias="CSE-pos-server-STORE_SE" country="SE" name="POS Server Store" unique-name="1161.POS_SERVER_STORE"/>
+            <node alias="GKR-mwb-store" country="SE" name="MWB Store" unique-name="1161.MWB_STORE"/>
+            <node alias="CSE-lps-store" country="SE" name="LPS Store" unique-name="1161.LPS_STORE"/>
+            <node alias="CSE-wdm" country="SE" name="WDM" unique-name="1161.WDM">
+                <change file="wall-config.xml" url="wall-config.walls.1.clientId" value="10.17.197.30"/>
+                <change file="web-ui-config.xml" url="webUiConfig.system.serverAddress" value="http://10.17.197.30:8080/app-wdm"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card" value="9904576"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:2" value="9904577"/>
+                <change file="wdm-config.properties" url="remote-services.businessUnitId" value="1161"/>
+            </node>
+            <node alias="GKR-Customer-Profile-Service-store" country="SE" name="CPS Store" unique-name="1161.CPS_STORE"/>
+            <node alias="GKR-Basket-Service-store" country="SE" name="BS Store" unique-name="1161.BS_STORE"/>
+            <node alias="GKR-Checkout-Service-store" country="SE" name="CS Store" unique-name="1161.CS_STORE"/>
+            <node alias="GKR-Fraud-Detection-Service-store" country="SE" name="FDS Store" unique-name="1161.FDS_STORE"/>
+            <node alias="GKR-Gate-Service-store" country="SE" name="GS Store" unique-name="1161.GS_STORE"/>
+            <node alias="GKR-Item-Registration-Service-store" country="SE" name="IRS Store" unique-name="1161.IRS_STORE"/>
+            <node alias="GKR-Payment-Service-store" country="SE" name="PS Store" unique-name="1161.PS_STORE"/>
+            <node alias="GKR-Shopping-List-Service-store" country="SE" name="SLS Store" unique-name="1161.SLS_STORE"/>
+        </node>
+    </nodes>
+</structure>
