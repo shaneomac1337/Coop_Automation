@@ -250,9 +250,6 @@ class StoreConfigGenerator:
             print(f"   Added web-ui-config change for store {store_id}: http://{ip_address}:8080/app-wdm")
 
         return changes
-<<<<<<< HEAD
-
-=======
     
     def generate_service_card_changes(self, store_id: str) -> List[ET.Element]:
         """Generate service-cards-config changes for a store based on service cards mapping."""
@@ -298,7 +295,6 @@ class StoreConfigGenerator:
         
         return changes
     
->>>>>>> c97cb17 (feat: Add service cards and wdm-config.properties support)
     def create_store_structure(self, store_id: str, store_data: Dict[str, Any]) -> ET.Element:
         """Create a complete store structure based on template."""
         # Create a deep copy of the template
