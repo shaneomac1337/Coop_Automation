@@ -57,7 +57,6 @@ def build_executable():
         '--onefile',                    # Create a single .exe file
         '--windowed',                   # No console window (GUI only)
         '--name=CoopStoreConfig',       # Name of the executable
-        '--icon=NONE',                  # No icon (can add later)
         '--add-data=config;config',     # Include entire config folder
         '--hidden-import=pandas',       # Ensure pandas is included
         '--hidden-import=openpyxl',     # Ensure openpyxl is included
@@ -102,6 +101,10 @@ def create_distribution_package():
     if exe_source.exists():
         shutil.copy2(exe_source, dist_folder / 'CoopStoreConfig.exe')
         print("   ✓ Copied executable")
+        
+        # Remove the standalone executable from dist root
+        exe_source.unlink()
+        print("   ✓ Removed standalone executable from dist/")
     
     # Copy required files
     files_to_copy = [
@@ -110,17 +113,19 @@ def create_distribution_package():
     ]
     
     for file in files_to_copy:
-        source = Path('..') / file if not Path(file).exists() else Path(file)
+        source = Path(file)
         if source.exists():
             shutil.copy2(source, dist_folder / Path(file).name)
             print(f"   ✓ Copied {Path(file).name}")
     
     # Copy config folder
-    config_source = Path('../config')
+    config_source = Path('config')
     config_dest = dist_folder / 'config'
     if config_source.exists():
         shutil.copytree(config_source, config_dest, dirs_exist_ok=True)
         print(f"   ✓ Copied config/ folder")
+    else:
+        print(f"   ⚠️ Warning: config/ folder not found at {config_source.absolute()}")
     
     # Create output folder
     (dist_folder / 'output').mkdir(exist_ok=True)
