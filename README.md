@@ -2,47 +2,120 @@
 
 This solution automates the generation of store manager configuration files for WDM (Wall Display Management) systems, similar to the existing printer configuration approach but focused on wall configurations, web-UI server settings, and service card management.
 
+## Features
+
+✨ **Graphical User Interface (GUI)** - Simple, user-friendly interface for all operations
+🤖 **Automated Generation** - Single command generates all store configurations
+🎯 **Flexible Configuration** - Support for variable number of walls per store
+💳 **Service Cards Management** - Automatic service card configuration
+📊 **Excel to JSON Converter** - Built-in conversion tool in GUI (requires pandas)
+🌐 **Web-UI Integration** - Server address configuration
+✅ **Built-in Validation** - Comprehensive error checking
+📊 **Real-time Feedback** - Progress logging and status updates
+🔄 **Multiple Modes** - Separate or combined output files
+
 ## Overview
 
 The automation solution consists of:
 
-1. **Store Mapping Configuration** (`store_wall_mapping.json`) - Defines stores and their wall IP addresses
-2. **Service Cards Mapping** (`service_cards_mapping.json`) - Defines service cards for each store
-3. **Configuration Generator** (`generate_store_config.py`) - Creates structure XML files
-4. **Configuration Validator** (`validate_config.py`) - Validates generated configurations
-5. **Excel to JSON Converter** (`convert_service_cards_to_json.py`) - Converts service cards Excel to JSON
-6. **Implementation Plan** (`store_configuration_automation_plan.md`) - Detailed technical documentation
+1. **Graphical User Interface** (`src/gui.py`) - Simple GUI for all operations
+2. **Store Mapping Configuration** (`config/mappings/store_wall_mapping.json`) - Defines stores and their wall IP addresses
+3. **Service Cards Mapping** (`config/mappings/service_cards_mapping.json`) - Defines service cards for each store
+4. **Configuration Generator** (`src/generate_store_config.py`) - Creates structure XML files
+5. **Configuration Validator** (`src/validate_config.py`) - Validates generated configurations
+6. **Excel to JSON Converter** (`src/convert_service_cards_to_json.py`) - Converts service cards Excel to JSON
+7. **Implementation Plan** (`docs/store_configuration_automation_plan.md`) - Detailed technical documentation
+
+## 📁 Project Structure
+
+```
+Coop_Automation/
+├── README.md                      # Main documentation (you are here)
+├── .gitignore                     # Git ignore rules
+├── start_gui.bat                  # Windows launcher for GUI
+│
+├── src/                           # Source code
+│   ├── gui.py                     # Graphical user interface
+│   ├── generate_store_config.py   # Configuration generator
+│   ├── validate_config.py         # Configuration validator
+│   └── convert_service_cards_to_json.py  # Excel converter
+│
+├── config/                        # Configuration files
+│   ├── templates/                 # XML templates
+│   │   ├── template.xml
+│   │   ├── web-ui-config.xml
+│   │   └── wall-config.xml
+│   ├── mappings/                  # Store and service mappings
+│   │   ├── store_wall_mapping.json
+│   │   ├── service_cards_mapping.json
+│   │   └── store_ip_mapping.properties
+│   └── examples/                  # Example configurations
+│
+├── docs/                          # Documentation
+│   ├── GUI_QUICKSTART.md
+│   ├── GUI_VISUAL_GUIDE.md
+│   ├── GUI_IMPLEMENTATION.md
+│   ├── BUILD_EXECUTABLE_GUIDE.md
+│   └── ... (more docs)
+│
+├── scripts/                       # Build and utility scripts
+│   └── build_exe.py               # PyInstaller build script
+│
+└── output/                        # Generated configurations
+    └── store_*.xml                # Generated store configs
+```
 
 ## Quick Start
 
-### 1. Generate Configuration for a Single Store
+### Option 1: Using the GUI (Recommended for Beginners)
 
 ```bash
-python generate_store_config.py --store 9999
+python src/gui.py
 ```
 
-### 2. Generate Configurations for All Stores (Separate Files)
-
+Or use the Windows launcher:
 ```bash
-python generate_store_config.py --all
+start_gui.bat
 ```
 
-### 3. Generate Combined Configuration for All Stores (Single File)
+The GUI provides an easy-to-use interface with:
+- 🎯 Store selection dropdown
+- 🚀 One-click configuration generation
+- ✓ Built-in validation
+- 📁 Direct access to output folder
+- 📊 Real-time log output
+- 📑 Excel to JSON conversion (for service cards)
+
+### Option 2: Using Command Line
+
+#### 1. Generate Configuration for a Single Store
 
 ```bash
-python generate_store_config.py --all --combined
+python src/generate_store_config.py --store 9999
 ```
 
-### 4. Validate Generated Configuration
+#### 2. Generate Configurations for All Stores (Separate Files)
 
 ```bash
-python validate_config.py --file output/store_9999_config.xml
+python src/generate_store_config.py --all
 ```
 
-### 5. Validate All Generated Configurations
+#### 3. Generate Combined Configuration for All Stores (Single File)
 
 ```bash
-python validate_config.py --directory output
+python src/generate_store_config.py --all --combined
+```
+
+#### 4. Validate Generated Configuration
+
+```bash
+python src/validate_config.py --file output/store_9999_config.xml
+```
+
+#### 5. Validate All Generated Configurations
+
+```bash
+python src/validate_config.py --directory output
 ```
 
 ## Generated Files
@@ -56,6 +129,87 @@ The solution can generate structure XML files in two formats:
 
 ### Combined File (With --combined flag)
 - `output/all_stores_config.xml` - All stores in a single configuration file
+
+## Using the GUI
+
+### Starting the GUI
+
+Simply run:
+```bash
+python src/gui.py
+```
+
+Or double-click: `start_gui.bat`
+
+### GUI Features
+
+The GUI provides an intuitive interface with the following sections:
+
+#### 1. **Configuration Files Section**
+- Set paths for store mapping, template, and output directory
+- Default values work out of the box
+
+#### 2. **Service Cards Conversion Section**
+- Convert Excel files (`service-cards.xlsx`) to JSON format
+- Browse button to select Excel file
+- Specify output JSON filename
+- One-click conversion with detailed feedback
+- **Note:** Requires `pandas` library: `pip install pandas openpyxl`
+
+#### 3. **Store Selection Section**
+- **Generate All Stores (Separate Files)** - Creates individual XML files for each store
+- **Generate All Stores (Combined File)** - Creates a single XML with all stores
+- **Generate Single Store** - Select and generate one store from the dropdown
+
+#### 4. **Action Buttons**
+- **🚀 Generate Configuration** - Starts the generation process
+- **✓ Validate Output** - Validates all generated files
+- **📁 Open Output Folder** - Opens the output directory in file explorer
+- **🔄 Reload Stores** - Refreshes the store list from mapping file
+
+#### 5. **Output Log**
+- Real-time feedback during generation and validation
+- Shows progress, errors, and success messages
+- Clear log button to start fresh
+
+#### 6. **Status Bar**
+- Shows current operation status at the bottom
+
+### GUI Workflow
+
+#### Standard Workflow:
+1. **Launch GUI**: Run `python src/gui.py` or double-click `start_gui.bat`
+2. **Select Mode**: Choose generation mode (all stores, combined, or single)
+3. **Select Store** (if single mode): Pick from dropdown
+4. **Generate**: Click "Generate Configuration" button
+5. **Validate**: Click "Validate Output" to check generated files
+6. **Open Folder**: Click "Open Output Folder" to view results
+
+#### Excel Conversion Workflow (For Service Cards):
+1. **Launch GUI**: Run `python src/gui.py` or double-click `start_gui.bat`
+2. **Locate Excel Section**: "Service Cards Conversion" section
+3. **Select File**: Click "Browse..." or enter path to `service-cards.xlsx`
+4. **Convert**: Click "📊 Convert Excel to JSON" button
+5. **Check Log**: See conversion results and statistics
+6. **Use JSON**: The generated `service_cards_mapping.json` is ready to use
+
+**Note:** Excel conversion requires pandas: `pip install pandas openpyxl`
+
+### GUI Benefits
+
+✅ **No Command Line Required** - Perfect for non-technical users
+✅ **Visual Feedback** - See exactly what's happening
+✅ **Error Prevention** - Clear options prevent mistakes
+✅ **Quick Access** - Open output folder directly
+✅ **Integrated Validation** - Test configurations immediately
+✅ **Store Browser** - See all available stores at a glance
+
+### GUI Documentation
+
+- **[GUI Quick Start Guide](docs/GUI_QUICKSTART.md)** - Step-by-step getting started
+- **[GUI Visual Guide](docs/GUI_VISUAL_GUIDE.md)** - Visual interface walkthrough
+- **[GUI Implementation Details](docs/GUI_IMPLEMENTATION.md)** - Technical documentation
+- **[Build Executable Guide](docs/BUILD_EXECUTABLE_GUIDE.md)** - Create standalone .exe file
 
 ## Configuration Structure
 
@@ -125,7 +279,7 @@ The solution also supports service-cards.xml changes based on service cards mapp
 **Converting Excel to JSON:**
 If you have service cards in Excel format (`service-cards.xlsx`), convert it to JSON:
 ```bash
-python convert_service_cards_to_json.py
+python src/convert_service_cards_to_json.py
 ```
 
 ### Wall Types
@@ -194,24 +348,24 @@ The `store_wall_mapping.json` file defines:
 ### Generator Script
 
 ```bash
-python generate_store_config.py [OPTIONS]
+python src/generate_store_config.py [OPTIONS]
 
 Options:
   --all                    Generate configurations for all stores
   --store STORE_ID         Generate configuration for specific store
   --combined               Generate all stores in a single combined file (use with --all)
   --output OUTPUT_DIR      Output directory (default: output)
-  --mapping MAPPING_FILE   Store mapping file (default: store_wall_mapping.json)
-  --template TEMPLATE_FILE Template file (default: template.xml)
-  --ip-mapping IP_FILE     Store IP mapping file for web-ui-config (default: store_ip_mapping.properties)
-  --service-cards CARDS_FILE Service cards mapping file (default: service_cards_mapping.json)
+  --mapping MAPPING_FILE   Store mapping file (default: config/mappings/store_wall_mapping.json)
+  --template TEMPLATE_FILE Template file (default: config/templates/template.xml)
+  --ip-mapping IP_FILE     Store IP mapping file (default: config/mappings/store_ip_mapping.properties)
+  --service-cards CARDS    Service cards mapping file (default: config/mappings/service_cards_mapping.json)
   --help                   Show help message
 ```
 
 ### Validator Script
 
 ```bash
-python validate_config.py [OPTIONS]
+python src/validate_config.py [OPTIONS]
 
 Options:
   --file FILE_PATH         Validate specific configuration file
@@ -276,29 +430,49 @@ The validator checks for:
 ## Files Generated
 
 ```
-automation/
-├── store_wall_mapping.json              # Store to wall IP mapping (JSON)
-├── store_ip_mapping.properties          # Store to server IP mapping (properties format)
-├── service_cards_mapping.json           # Store to service cards mapping (JSON)
-├── service-cards.xlsx                   # Original service cards Excel file
-├── template.xml                         # Base structure template
-├── generate_store_config.py             # Configuration generator
-├── validate_config.py                   # Configuration validator
-├── convert_service_cards_to_json.py     # Excel to JSON converter for service cards
-├── store_configuration_automation_plan.md # Technical documentation
+Coop_Automation/
+├── src/                                 # Source code
+│   ├── gui.py                           # Graphical User Interface
+│   ├── generate_store_config.py         # Configuration generator
+│   ├── validate_config.py               # Configuration validator
+│   └── convert_service_cards_to_json.py # Excel to JSON converter
+│
+├── config/                              # Configuration files
+│   ├── templates/                       # XML templates
+│   │   ├── template.xml
+│   │   ├── web-ui-config.xml
+│   │   └── wall-config.xml
+│   ├── mappings/                        # Mappings
+│   │   ├── store_wall_mapping.json      # Store to wall IP mapping
+│   │   ├── store_ip_mapping.properties  # Store to server IP mapping
+│   │   └── service_cards_mapping.json   # Store to service cards mapping
+│   └── examples/                        # Example files
+│
+├── docs/                                # Documentation
+│   ├── GUI_QUICKSTART.md
+│   ├── BUILD_EXECUTABLE_GUIDE.md
+│   ├── SERVICE_CARDS_IMPLEMENTATION.md
+│   └── ... (more documentation)
+│
+├── scripts/                             # Build scripts
+│   └── build_exe.py                     # PyInstaller build script
+│
+├── output/                              # Generated configurations
+│   ├── store_9999_config.xml            # Individual store files
+│   ├── store_1674_config.xml
+│   ├── store_1655_config.xml
+│   └── all_stores_config.xml            # Combined file (with --combined)
+│
 ├── README.md                            # This file
-└── output/                              # Generated configurations
-    ├── store_9999_config.xml            # Individual store files
-    ├── store_1674_config.xml
-    ├── store_1655_config.xml
-    └── all_stores_config.xml             # Combined file (with --combined)
+├── .gitignore                           # Git ignore rules
+└── start_gui.bat                        # Windows launcher
 ```
 
 ## Output Options
 
 ### 🔄 **Separate Files Mode** (Default)
 ```bash
-python generate_store_config.py --all
+python src/generate_store_config.py --all
 ```
 - Generates individual XML files for each store
 - Easier to manage individual store configurations
@@ -306,7 +480,7 @@ python generate_store_config.py --all
 
 ### 📦 **Combined File Mode** (New Feature)
 ```bash
-python generate_store_config.py --all --combined
+python src/generate_store_config.py --all --combined
 ```
 - Generates single XML file containing all stores
 - Similar to GKStores configuration format

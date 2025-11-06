@@ -8,7 +8,21 @@ This repository automates the generation of store manager configuration files fo
 
 ## Essential Commands
 
-### Generate Configurations
+### Using the GUI (Recommended)
+```bash
+# Launch graphical user interface
+python gui.py
+```
+
+The GUI provides:
+- Store selection dropdown with all available stores
+- One-click generation (all stores or single store)
+- Integrated validation
+- Real-time log output
+- Direct access to output folder
+- Excel to JSON conversion for service cards (requires pandas)
+
+### Generate Configurations (Command Line)
 ```bash
 # Generate all store configurations (separate files)
 python generate_store_config.py --all
@@ -35,6 +49,7 @@ python validate_config.py --directory output --summary
 ## Architecture Overview
 
 ### Core Components
+- **`gui.py`**: Simple tkinter-based GUI for all operations (NEW)
 - **`generate_store_config.py`**: Main configuration generator that processes JSON mappings and creates XML structure files
 - **`validate_config.py`**: Configuration validator that ensures XML structure, wall configurations, and IP addresses are valid
 - **`store_wall_mapping.json`**: Store-to-wall IP address mapping with metadata and wall types

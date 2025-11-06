@@ -57,10 +57,10 @@ def normalize_identifier(text: str) -> str:
 class StoreConfigGenerator:
     """Main class for generating store configurations."""
     
-    def __init__(self, mapping_file: str = "store_wall_mapping.json",
-                 template_file: str = "template.xml",
-                 ip_mapping_file: str = "store_ip_mapping.properties",
-                 service_cards_file: str = "service_cards_mapping.json"):
+    def __init__(self, mapping_file: str = "config/mappings/store_wall_mapping.json",
+                 template_file: str = "config/templates/template.xml",
+                 ip_mapping_file: str = "config/mappings/store_ip_mapping.properties",
+                 service_cards_file: str = "config/mappings/service_cards_mapping.json"):
         self.mapping_file = mapping_file
         self.template_file = template_file
         self.ip_mapping_file = ip_mapping_file
@@ -576,15 +576,15 @@ Examples:
                        help="Generate all stores in a single combined file (use with --all)")
     parser.add_argument("--output", type=str, default="output",
                        help="Output directory (default: output)")
-    parser.add_argument("--mapping", type=str, default="store_wall_mapping.json",
-                       help="Store mapping file (default: store_wall_mapping.json)")
+    parser.add_argument("--mapping", type=str, default="config/mappings/store_wall_mapping.json",
+                       help="Store mapping file (default: config/mappings/store_wall_mapping.json)")
     parser.add_argument("--template", type=str,
-                       default="template.xml",
-                       help="Template file (default: template.xml)")
-    parser.add_argument("--ip-mapping", type=str, default="store_ip_mapping.properties",
-                       help="Store IP mapping file for web-ui-config (default: store_ip_mapping.properties)")
-    parser.add_argument("--service-cards", type=str, default="service_cards_mapping.json",
-                       help="Service cards mapping file (default: service_cards_mapping.json)")
+                       default="config/templates/template.xml",
+                       help="Template file (default: config/templates/template.xml)")
+    parser.add_argument("--ip-mapping", type=str, default="config/mappings/store_ip_mapping.properties",
+                       help="Store IP mapping file for web-ui-config (default: config/mappings/store_ip_mapping.properties)")
+    parser.add_argument("--service-cards", type=str, default="config/mappings/service_cards_mapping.json",
+                       help="Service cards mapping file (default: config/mappings/service_cards_mapping.json)")
     
     args = parser.parse_args()
     

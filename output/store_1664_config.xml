@@ -27,11 +27,6 @@
             <node alias="GKR-mwb-store" country="SE" name="MWB Store" unique-name="1664.MWB_STORE"/>
             <node alias="CSE-lps-store" country="SE" name="LPS Store" unique-name="1664.LPS_STORE"/>
             <node alias="CSE-wdm" country="SE" name="WDM" unique-name="1664.WDM">
-                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card" value="9904625"/>
-                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:2" value="9904626"/>
-                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:3" value="9904627"/>
-                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:4" value="9904628"/>
-                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:5" value="9904629"/>
                 <change file="wdm-config.properties" url="remote-services.businessUnitId" value="1664"/>
             </node>
             <node alias="GKR-Customer-Profile-Service-store" country="SE" name="CPS Store" unique-name="1664.CPS_STORE"/>
