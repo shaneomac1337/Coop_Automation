@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<structure>
+    <systems>
+        <system alias="GKR-Store" name="GKR-Store"/>
+        <system alias="CSE-sdc-store_SE" name="CSE-sdc-store_SE"/>
+        <system alias="CSE-pos-server-STORE_SE" name="CSE-pos-server-STORE_SE"/>
+        <system alias="GKR-mwb-store" name="GKR-mwb-store"/>
+        <system alias="CSE-lps-store" name="CSE-lps-store"/>
+        <system alias="CSE-wdm" name="CSE-wdm"/>
+        <system alias="GKR-Customer-Profile-Service-store" name="GKR-Customer-Profile-Service-store"/>
+        <system alias="GKR-Basket-Service-store" name="GKR-Basket-Service-store"/>
+        <system alias="GKR-Checkout-Service-store" name="GKR-Checkout-Service-store"/>
+        <system alias="GKR-Fraud-Detection-Service-store" name="GKR-Fraud-Detection-Service-store"/>
+        <system alias="GKR-Gate-Service-store" name="GKR-Gate-Service-store"/>
+        <system alias="GKR-Item-Registration-Service-store" name="GKR-Item-Registration-Service-store"/>
+        <system alias="GKR-Payment-Service-store" name="GKR-Payment-Service-store"/>
+        <system alias="GKR-Shopping-List-Service-store" name="GKR-Shopping-List-Service-store"/>
+    </systems>
+    <time-regimes>
+        <time-windows/>
+    </time-regimes>
+    <central-is/>
+    <nodes>
+        <node alias="GKR-Store" country="SE" name="Mitt - 1677 Coop Forum Marieberg" parent-node-ident="ENTERPRISE.TENANT.SWEDEN" rsid="1677" unique-name="ENTERPRISE.TENANT.SWEDEN.MITT_-_1677_COOP_FORUM_MARIEBERG">
+            <node alias="CSE-sdc-store_SE" country="SE" name="SDC Store" unique-name="1677.SDC_STORE"/>
+            <node alias="CSE-pos-server-STORE_SE" country="SE" name="POS Server Store" unique-name="1677.POS_SERVER_STORE"/>
+            <node alias="GKR-mwb-store" country="SE" name="MWB Store" unique-name="1677.MWB_STORE"/>
+            <node alias="CSE-lps-store" country="SE" name="LPS Store" unique-name="1677.LPS_STORE"/>
+            <node alias="CSE-wdm" country="SE" name="WDM" unique-name="1677.WDM">
+                <change file="wall-config.xml" url="wall-config.walls.1.clientId" value="10.30.219.31"/>
+                <change file="wall-config.xml" url="wall-config.walls.100.clientId" value="10.30.219.33"/>
+                <change file="web-ui-config.xml" url="webUiConfig.system.serverAddress" value="http://10.30.219.31:8080/app-wdm"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card" value="9900614"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:2" value="9900613"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:3" value="9902667"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:4" value="9902672"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:5" value="9902671"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:6" value="9902674"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:7" value="9902670"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:8" value="9902665"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:9" value="9901641"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:10" value="9901640"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:11" value="9901639"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:12" value="9901638"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:13" value="9901642"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:14" value="9901643"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:15" value="9900565"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:16" value="9900567"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:17" value="9900601"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:18" value="9901124"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:19" value="9900608"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:20" value="9901123"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:21" value="9901635"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:22" value="9900344"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:23" value="9900342"/>
+                <change file="wdm-config.properties" url="remote-services.businessUnitId" value="1677"/>
+            </node>
+            <node alias="GKR-Customer-Profile-Service-store" country="SE" name="CPS Store" unique-name="1677.CPS_STORE"/>
+            <node alias="GKR-Basket-Service-store" country="SE" name="BS Store" unique-name="1677.BS_STORE"/>
+            <node alias="GKR-Checkout-Service-store" country="SE" name="CS Store" unique-name="1677.CS_STORE"/>
+            <node alias="GKR-Fraud-Detection-Service-store" country="SE" name="FDS Store" unique-name="1677.FDS_STORE"/>
+            <node alias="GKR-Gate-Service-store" country="SE" name="GS Store" unique-name="1677.GS_STORE"/>
+            <node alias="GKR-Item-Registration-Service-store" country="SE" name="IRS Store" unique-name="1677.IRS_STORE"/>
+            <node alias="GKR-Payment-Service-store" country="SE" name="PS Store" unique-name="1677.PS_STORE"/>
+            <node alias="GKR-Shopping-List-Service-store" country="SE" name="SLS Store" unique-name="1677.SLS_STORE"/>
+        </node>
+    </nodes>
+</structure>

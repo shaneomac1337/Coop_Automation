@@ -29,6 +29,9 @@
             <node alias="CSE-wdm" country="SE" name="WDM" unique-name="1161.WDM">
                 <change file="wall-config.xml" url="wall-config.walls.1.clientId" value="10.17.197.30"/>
                 <change file="web-ui-config.xml" url="webUiConfig.system.serverAddress" value="http://10.17.197.30:8080/app-wdm"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card" value="9904576"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:2" value="9904577"/>
+                <change file="wdm-config.properties" url="remote-services.businessUnitId" value="1161"/>
             </node>
             <node alias="GKR-Customer-Profile-Service-store" country="SE" name="CPS Store" unique-name="1161.CPS_STORE"/>
             <node alias="GKR-Basket-Service-store" country="SE" name="BS Store" unique-name="1161.BS_STORE"/>
@@ -48,6 +51,11 @@
                 <change file="wall-config.xml" url="wall-config.walls.1.clientId" value="10.31.99.32"/>
                 <change file="wall-config.xml" url="wall-config.walls.100.clientId" value="10.31.99.31"/>
                 <change file="web-ui-config.xml" url="webUiConfig.system.serverAddress" value="http://10.31.99.32:8080/app-wdm"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card" value="9903215"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:2" value="9903183"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:3" value="9903292"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:4" value="9903184"/>
+                <change file="wdm-config.properties" url="remote-services.businessUnitId" value="1038"/>
             </node>
             <node alias="GKR-Customer-Profile-Service-store" country="SE" name="CPS Store" unique-name="1038.CPS_STORE"/>
             <node alias="GKR-Basket-Service-store" country="SE" name="BS Store" unique-name="1038.BS_STORE"/>
@@ -68,6 +76,24 @@
                 <change file="wall-config.xml" url="wall-config.walls.2.clientId" value="10.23.131.21"/>
                 <change file="wall-config.xml" url="wall-config.walls.100.clientId" value="10.23.131.23"/>
                 <change file="web-ui-config.xml" url="webUiConfig.system.serverAddress" value="http://10.23.131.22:8080/app-wdm"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card" value="9906410"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:2" value="9906244"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:3" value="9906183"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:4" value="9905500"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:5" value="9905457"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:6" value="9906245"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:7" value="9906185"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:8" value="9907191"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:9" value="9907190"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:10" value="9907189"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:11" value="9907188"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:12" value="9907187"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:13" value="9907186"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:14" value="9907185"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:15" value="9907184"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:16" value="9907183"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:17" value="9907182"/>
+                <change file="wdm-config.properties" url="remote-services.businessUnitId" value="1346"/>
             </node>
             <node alias="GKR-Customer-Profile-Service-store" country="SE" name="CPS Store" unique-name="1346.CPS_STORE"/>
             <node alias="GKR-Basket-Service-store" country="SE" name="BS Store" unique-name="1346.BS_STORE"/>
@@ -88,6 +114,25 @@
                 <change file="wall-config.xml" url="wall-config.walls.2.clientId" value="10.30.115.30"/>
                 <change file="wall-config.xml" url="wall-config.walls.100.clientId" value="10.30.115.32"/>
                 <change file="web-ui-config.xml" url="webUiConfig.system.serverAddress" value="http://10.30.115.31:8080/app-wdm"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card" value="9904243"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:2" value="9904791"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:3" value="9904785"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:4" value="9904777"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:5" value="9904776"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:6" value="9904792"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:7" value="9904241"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:8" value="9904240"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:9" value="9904210"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:10" value="9904209"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:11" value="9904204"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:12" value="9904207"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:13" value="9904208"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:14" value="9904206"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:15" value="9907636"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:16" value="9907845"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:17" value="9907846"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:18" value="9907664"/>
+                <change file="wdm-config.properties" url="remote-services.businessUnitId" value="1828"/>
             </node>
             <node alias="GKR-Customer-Profile-Service-store" country="SE" name="CPS Store" unique-name="1828.CPS_STORE"/>
             <node alias="GKR-Basket-Service-store" country="SE" name="BS Store" unique-name="1828.BS_STORE"/>
@@ -107,6 +152,30 @@
                 <change file="wall-config.xml" url="wall-config.walls.1.clientId" value="10.30.219.31"/>
                 <change file="wall-config.xml" url="wall-config.walls.100.clientId" value="10.30.219.33"/>
                 <change file="web-ui-config.xml" url="webUiConfig.system.serverAddress" value="http://10.30.219.31:8080/app-wdm"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card" value="9900614"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:2" value="9900613"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:3" value="9902667"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:4" value="9902672"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:5" value="9902671"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:6" value="9902674"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:7" value="9902670"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:8" value="9902665"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:9" value="9901641"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:10" value="9901640"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:11" value="9901639"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:12" value="9901638"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:13" value="9901642"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:14" value="9901643"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:15" value="9900565"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:16" value="9900567"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:17" value="9900601"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:18" value="9901124"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:19" value="9900608"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:20" value="9901123"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:21" value="9901635"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:22" value="9900344"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:23" value="9900342"/>
+                <change file="wdm-config.properties" url="remote-services.businessUnitId" value="1677"/>
             </node>
             <node alias="GKR-Customer-Profile-Service-store" country="SE" name="CPS Store" unique-name="1677.CPS_STORE"/>
             <node alias="GKR-Basket-Service-store" country="SE" name="BS Store" unique-name="1677.BS_STORE"/>

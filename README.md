@@ -1,15 +1,17 @@
 # Store Manager Configuration Import Automation
 
-This solution automates the generation of store manager configuration files for WDM (Wall Display Management) systems, similar to the existing printer configuration approach but focused on wall configurations.
+This solution automates the generation of store manager configuration files for WDM (Wall Display Management) systems, similar to the existing printer configuration approach but focused on wall configurations, web-UI server settings, and service card management.
 
 ## Overview
 
 The automation solution consists of:
 
 1. **Store Mapping Configuration** (`store_wall_mapping.json`) - Defines stores and their wall IP addresses
-2. **Configuration Generator** (`generate_store_config.py`) - Creates structure XML files
-3. **Configuration Validator** (`validate_config.py`) - Validates generated configurations
-4. **Implementation Plan** (`store_configuration_automation_plan.md`) - Detailed technical documentation
+2. **Service Cards Mapping** (`service_cards_mapping.json`) - Defines service cards for each store
+3. **Configuration Generator** (`generate_store_config.py`) - Creates structure XML files
+4. **Configuration Validator** (`validate_config.py`) - Validates generated configurations
+5. **Excel to JSON Converter** (`convert_service_cards_to_json.py`) - Converts service cards Excel to JSON
+6. **Implementation Plan** (`store_configuration_automation_plan.md`) - Detailed technical documentation
 
 ## Quick Start
 
@@ -70,6 +72,9 @@ The key feature is the addition of wall configuration changes to the CSE-wdm nod
     <change file="wall-config.xml" url="wall-config.walls.3.clientId" value="192.168.99.103"/>
     <change file="wall-config.xml" url="wall-config.walls.100.clientId" value="192.168.99.200"/>
     <change file="web-ui-config.xml" url="webUiConfig.system.serverAddress" value="http://192.168.26.213:8080/app-wdm"/>
+    <change file="service-cards.xml" url="service-cards-config.service-cards.service-card" value="9903215"/>
+    <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:2" value="9903183"/>
+    <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:3" value="9903292"/>
 </node>
 ```
 
@@ -89,6 +94,38 @@ The solution also supports web-ui-config changes based on a simple store IP mapp
 **Generated web-ui-config change:**
 ```xml
 <change file="web-ui-config.xml" url="webUiConfig.system.serverAddress" value="http://192.168.26.213:8080/app-wdm"/>
+```
+
+### Service Cards Configuration Changes
+
+The solution also supports service-cards.xml changes based on service cards mapping JSON file (`service_cards_mapping.json`):
+
+**Service Cards Mapping Structure:**
+```json
+{
+  "stores": {
+    "1038": {
+      "cards": ["9903215", "9903183", "9903292", "9903184"],
+      "card_count": 4
+    }
+  }
+}
+```
+
+**Generated service-cards changes:**
+```xml
+<change file="service-cards.xml" url="service-cards-config.service-cards.service-card" value="9903215"/>
+<change file="service-cards.xml" url="service-cards-config.service-cards.service-card:2" value="9903183"/>
+<change file="service-cards.xml" url="service-cards-config.service-cards.service-card:3" value="9903292"/>
+<change file="service-cards.xml" url="service-cards-config.service-cards.service-card:4" value="9903184"/>
+```
+
+**Note**: The first service card has no index suffix, while subsequent cards use `:2`, `:3`, `:4`, etc.
+
+**Converting Excel to JSON:**
+If you have service cards in Excel format (`service-cards.xlsx`), convert it to JSON:
+```bash
+python convert_service_cards_to_json.py
 ```
 
 ### Wall Types
@@ -131,6 +168,12 @@ The `store_wall_mapping.json` file defines:
 - Mandatory walls: 1 (dispense) and 100 (disposal)
 - Optional walls: 2, 3, etc.
 
+### ✅ Service Cards Management
+- Support for multiple service cards per store
+- Automatic conversion from Excel to JSON format
+- First card uses base URL, subsequent cards use indexed URLs (`:2`, `:3`, etc.)
+- Optional feature - stores without service cards work fine
+
 ### ✅ IP Address Management
 - Unique IP per wall per store
 - IP address format validation
@@ -161,6 +204,7 @@ Options:
   --mapping MAPPING_FILE   Store mapping file (default: store_wall_mapping.json)
   --template TEMPLATE_FILE Template file (default: template.xml)
   --ip-mapping IP_FILE     Store IP mapping file for web-ui-config (default: store_ip_mapping.properties)
+  --service-cards CARDS_FILE Service cards mapping file (default: service_cards_mapping.json)
   --help                   Show help message
 ```
 
@@ -226,6 +270,8 @@ The validator checks for:
 - ✅ Proper CSE-wdm node configuration
 - ✅ Web-UI configuration URL format validation
 - ✅ Server address format (http://ip:8080/app-wdm)
+- ✅ Service card number format validation
+- ✅ Service card URL pattern validation
 
 ## Files Generated
 
@@ -233,9 +279,12 @@ The validator checks for:
 automation/
 ├── store_wall_mapping.json              # Store to wall IP mapping (JSON)
 ├── store_ip_mapping.properties          # Store to server IP mapping (properties format)
+├── service_cards_mapping.json           # Store to service cards mapping (JSON)
+├── service-cards.xlsx                   # Original service cards Excel file
 ├── template.xml                         # Base structure template
 ├── generate_store_config.py             # Configuration generator
 ├── validate_config.py                   # Configuration validator
+├── convert_service_cards_to_json.py     # Excel to JSON converter for service cards
 ├── store_configuration_automation_plan.md # Technical documentation
 ├── README.md                            # This file
 └── output/                              # Generated configurations
@@ -277,5 +326,8 @@ python generate_store_config.py --all --combined
 ✅ **Template-based approach ensures consistency**
 ✅ **Support for both separate and combined output formats**
 ✅ **Dual configuration system (wall + web-ui) working seamlessly**
+✅ **Service cards configuration system integrated**
+✅ **Excel to JSON conversion tool for service cards**
+✅ **Automatic indexed URL generation for multiple service cards**
 
-The solution is ready for production use and can be easily extended for additional stores or modified wall configurations. Both wall management and web-UI server configurations are fully automated.
+The solution is ready for production use and can be easily extended for additional stores or modified wall configurations. Wall management, web-UI server configurations, and service cards management are all fully automated.
