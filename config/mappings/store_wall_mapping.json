@@ -6,11 +6,12 @@
     "mandatory_walls": [
       1
     ],
-    "wall_types": {
-      "1": "WALL_TYPE_1 (Dispensing)",
-      "2": "WALL_TYPE_1 (Dispensing)",
-      "3": "WALL_TYPE_1 (Dispensing)",
-      "100": "WALL_TYPE_DISPOSAL (Disposal)"
+    "wall_types_example": {
+      "_comment": "This is just an EXAMPLE showing how to configure wall types per store. To enable wall types for a specific store, add 'wall_type_descriptions' to that store's configuration.",
+      "1": "Dispensing wall for 50 devices with handicap rows 5-6.",
+      "2": "Additional dispensing wall.",
+      "3": "Additional dispensing wall.",
+      "100": "Disposal wall."
     }
   },
   "stores": {
@@ -38,7 +39,16 @@
       "walls": {
         "1": "10.23.131.22",
         "2": "10.23.131.21",
-        "100": "10.23.131.23"
+        "100": "10.23.131.23",
+        "3": "10.23.131.24",
+        "4": "10.23.131.25"
+      },
+      "wall_type_descriptions": {
+        "1": "Main dispensing wall with 50 devices",
+        "100": "Disposal wall for returns",
+        "2": "Secondary dispensing wall with 30 devices",
+        "3": "Tertiary dispensing wall with 20 devices",
+        "4": "Reserved for future use"
       }
     },
     "1828": {
@@ -58,6 +68,14 @@
       "walls": {
         "1": "10.30.219.31",
         "100": "10.30.219.33"
+      }
+    },
+    "1833": {
+      "name": "Norrbotten - 1833 Coop Arvidsjaur",
+      "country": "SE",
+      "parent_node": "ENTERPRISE.TENANT.SWEDEN",
+      "walls": {
+        "1": "10.22.131.14"
       }
     },
     "1681": {

@@ -75,7 +75,7 @@ class StoreConfigGenerator:
         try:
             with open(self.mapping_file, 'r', encoding='utf-8') as f:
                 self.store_mapping = json.load(f)
-            
+
             # Validate mandatory walls
             if self.store_mapping and 'metadata' in self.store_mapping:
                 mandatory_walls = self.store_mapping['metadata'].get('mandatory_walls', [])
@@ -211,15 +211,71 @@ class StoreConfigGenerator:
 
         changes: List[ET.Element] = []
 
+        # Get store-level wall type descriptions (opt-in feature)
+        wall_type_descriptions = store_data.get("wall_type_descriptions", {})
+
         for wall_id, ip_address in walls.items():
             if not self.validate_ip_address(ip_address):
                 raise ValueError(f"Invalid IP address '{ip_address}' for store {store_id}, wall {wall_id}")
 
+            # Add clientId change (always generated)
             change = ET.Element("change")
             change.set("file", "wall-config.xml")
             change.set("url", f"wall-config.walls.{wall_id}.clientId")
             change.set("value", ip_address)
             changes.append(change)
+
+            # Add wallType change ONLY if this wall has a description defined in wall_type_descriptions
+            if wall_id in wall_type_descriptions:
+                # Auto-derive wall type from wall ID
+                wall_type = "WALL_TYPE_DISPOSAL" if wall_id == "100" else f"WALL_TYPE_{wall_id}"
+
+                wall_type_change = ET.Element("change")
+                wall_type_change.set("file", "wall-config.xml")
+                wall_type_change.set("url", f"wall-config.walls.{wall_id}.wallType")
+                wall_type_change.set("value", wall_type)
+                changes.append(wall_type_change)
+
+        return changes
+
+    def generate_wall_type_description_changes(self, store_id: str, store_data: Dict[str, Any]) -> List[ET.Element]:
+        """Generate wall type description change elements for a store."""
+        if store_data.get("skip_wdm", False):
+            print(f"   Skipping wall type description changes for store {store_id} (skip_wdm set)")
+            return []
+
+        walls = store_data.get("walls") or {}
+        if not walls:
+            return []
+
+        changes: List[ET.Element] = []
+
+        # Get store-level wall type descriptions (opt-in feature)
+        wall_type_descriptions = store_data.get("wall_type_descriptions", {})
+
+        # Only generate changes if store has wall_type_descriptions defined
+        if not wall_type_descriptions:
+            return []
+
+        # Generate description change for each wall that has a description
+        for wall_id, description in wall_type_descriptions.items():
+            # Skip if this wall is not actually used by the store
+            if wall_id not in walls:
+                continue
+
+            # Auto-derive wall type from wall ID
+            wall_type = "WALL_TYPE_DISPOSAL" if wall_id == "100" else f"WALL_TYPE_{wall_id}"
+
+            # Only create change if description is not empty
+            if description and description.strip():
+                change = ET.Element("change")
+                change.set("file", "wall-config.xml")
+                change.set("url", f"wall-config.wall-types.{wall_type}.description")
+                change.set("value", description)
+                changes.append(change)
+
+        if changes:
+            print(f"   Added {len(changes)} wall type description(s) for store {store_id}")
 
         return changes
 
@@ -354,17 +410,22 @@ class StoreConfigGenerator:
                             wall_changes = self.generate_wall_changes(store_id, store_data)
                             for change in wall_changes:
                                 new_child.append(change)
-                            
+
+                            # Add wall type description changes to CSE-wdm node
+                            wall_type_desc_changes = self.generate_wall_type_description_changes(store_id, store_data)
+                            for change in wall_type_desc_changes:
+                                new_child.append(change)
+
                             # Add web-ui-config changes to CSE-wdm node
                             webui_changes = self.generate_webui_changes(store_id, store_data)
                             for change in webui_changes:
                                 new_child.append(change)
-                            
+
                             # Add service card changes to CSE-wdm node
                             service_card_changes = self.generate_service_card_changes(store_id)
                             for change in service_card_changes:
                                 new_child.append(change)
-                            
+
                             # Add wdm-config.properties changes to CSE-wdm node
                             wdm_config_changes = self.generate_wdm_config_changes(store_id)
                             for change in wdm_config_changes:
@@ -499,17 +560,22 @@ class StoreConfigGenerator:
                                 wall_changes = self.generate_wall_changes(store_id, store_data)
                                 for change in wall_changes:
                                     new_child.append(change)
-                                
+
+                                # Add wall type description changes to CSE-wdm node
+                                wall_type_desc_changes = self.generate_wall_type_description_changes(store_id, store_data)
+                                for change in wall_type_desc_changes:
+                                    new_child.append(change)
+
                                 # Add web-ui-config changes to CSE-wdm node
                                 webui_changes = self.generate_webui_changes(store_id, store_data)
                                 for change in webui_changes:
                                     new_child.append(change)
-                                
+
                                 # Add service card changes to CSE-wdm node
                                 service_card_changes = self.generate_service_card_changes(store_id)
                                 for change in service_card_changes:
                                     new_child.append(change)
-                                
+
                                 # Add wdm-config.properties changes to CSE-wdm node
                                 wdm_config_changes = self.generate_wdm_config_changes(store_id)
                                 for change in wdm_config_changes:
