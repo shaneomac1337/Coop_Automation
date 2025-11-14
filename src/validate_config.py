@@ -67,59 +67,121 @@ class ConfigValidator:
     def validate_wall_configurations(self, root: ET.Element) -> bool:
         """Validate wall configuration changes in the XML."""
         wall_changes = root.findall(".//change[@file='wall-config.xml']")
-        
+
         if not wall_changes:
             self.errors.append("No wall configuration changes found")
             return False
-        
+
         # Track wall IDs and IP addresses
         wall_ips: Dict[str, str] = {}
+        wall_types: Dict[str, str] = {}
         mandatory_walls: Set[str] = {"1"}
         found_walls: Set[str] = set()
-        
+        found_wall_types: Set[str] = set()
+
         for change in wall_changes:
             url = change.get("url", "")
             value = change.get("value", "")
-            
-            # Extract wall ID from URL (format: wall-config.walls.X.clientId)
-            if "wall-config.walls." in url and ".clientId" in url:
-                # Extract wall ID between "walls." and ".clientId"
-                start = url.find("wall-config.walls.") + 18
-                end = url.find(".clientId")
-                wall_id = url[start:end]
-                found_walls.add(wall_id)
-                
-                # Validate IP address
-                if not self.validate_ip_address(value):
-                    self.errors.append(f"Invalid IP address '{value}' for wall {wall_id}")
-                else:
-                    if value in wall_ips.values():
-                        self.errors.append(f"Duplicate IP address '{value}' found")
-                    wall_ips[wall_id] = value
+
+            # Extract wall ID from URL (format: wall-config.walls.X.clientId or wall-config.walls.X.wallType)
+            if "wall-config.walls." in url:
+                if ".clientId" in url:
+                    # Extract wall ID between "walls." and ".clientId"
+                    start = url.find("wall-config.walls.") + 18
+                    end = url.find(".clientId")
+                    wall_id = url[start:end]
+                    found_walls.add(wall_id)
+
+                    # Validate IP address
+                    if not self.validate_ip_address(value):
+                        self.errors.append(f"Invalid IP address '{value}' for wall {wall_id}")
+                    else:
+                        if value in wall_ips.values():
+                            self.errors.append(f"Duplicate IP address '{value}' found")
+                        wall_ips[wall_id] = value
+
+                elif ".wallType" in url:
+                    # Extract wall ID between "walls." and ".wallType"
+                    start = url.find("wall-config.walls.") + 18
+                    end = url.find(".wallType")
+                    wall_id = url[start:end]
+                    found_wall_types.add(wall_id)
+
+                    # Validate wall type format
+                    if not value.startswith("WALL_TYPE_"):
+                        self.errors.append(f"Invalid wall type '{value}' for wall {wall_id} (should start with 'WALL_TYPE_')")
+                    else:
+                        wall_types[wall_id] = value
+
+                    # Validate wall type matches wall ID convention
+                    if wall_id == "100" and value != "WALL_TYPE_DISPOSAL":
+                        self.errors.append(f"Wall 100 should have type 'WALL_TYPE_DISPOSAL', found '{value}'")
+                    elif wall_id != "100" and value != f"WALL_TYPE_{wall_id}":
+                        self.errors.append(f"Wall {wall_id} should have type 'WALL_TYPE_{wall_id}', found '{value}'")
+
+            elif "wall-config.wall-types." in url:
+                # Wall type description - will be validated in separate method
+                pass
             else:
-                self.errors.append(f"Invalid wall configuration URL: {url}")
-        
+                if "wall-config" in url:
+                    self.warnings.append(f"Unexpected wall-config URL: {url}")
+
         # Check mandatory walls
         missing_walls = mandatory_walls - found_walls
         if missing_walls:
             self.errors.append(f"Missing mandatory walls: {', '.join(missing_walls)}")
-        
+
+        # Check that each wall with clientId also has wallType
+        missing_wall_types = found_walls - found_wall_types
+        if missing_wall_types:
+            self.warnings.append(f"Walls missing wallType configuration: {', '.join(sorted(missing_wall_types))}")
+
         # Validate wall ID sequence
         wall_ids = [int(w) for w in found_walls if w.isdigit()]
         if wall_ids:
             wall_ids.sort()
             if wall_ids[0] != 1:
                 self.warnings.append("Wall IDs should start with 1")
-            
+
             # Check for gaps (except between regular walls and disposal wall 100)
             regular_walls = [w for w in wall_ids if w < 100]
             if len(regular_walls) > 1:
                 for i in range(1, len(regular_walls)):
                     if regular_walls[i] - regular_walls[i-1] > 1:
                         self.warnings.append(f"Gap in wall ID sequence: {regular_walls[i-1]} to {regular_walls[i]}")
-        
+
         return len(self.errors) == 0
-    
+
+    def validate_wall_type_descriptions(self, root: ET.Element) -> bool:
+        """Validate wall type description changes in the XML."""
+        wall_type_desc_changes = root.findall(".//change[@file='wall-config.xml']")
+
+        found_descriptions: Dict[str, str] = {}
+
+        for change in wall_type_desc_changes:
+            url = change.get("url", "")
+            value = change.get("value", "")
+
+            # Check if it's a wall type description
+            if "wall-config.wall-types." in url and ".description" in url:
+                # Extract wall type between "wall-types." and ".description"
+                start = url.find("wall-config.wall-types.") + 23
+                end = url.find(".description")
+                wall_type = url[start:end]
+
+                # Validate wall type format
+                if not wall_type.startswith("WALL_TYPE_"):
+                    self.errors.append(f"Invalid wall type name '{wall_type}' (should start with 'WALL_TYPE_')")
+
+                # Check if description is empty
+                if not value or not value.strip():
+                    self.warnings.append(f"Empty description for wall type '{wall_type}'")
+                else:
+                    found_descriptions[wall_type] = value
+
+        # Wall type descriptions are optional, so just return success
+        return len(self.errors) == 0
+
     def validate_webui_configurations(self, root: ET.Element) -> bool:
         """Validate web-ui-config changes in the XML."""
         webui_changes = root.findall(".//change[@file='web-ui-config.xml']")
@@ -255,6 +317,7 @@ class ConfigValidator:
         self.validate_systems(root)
         self.validate_store_node(root)
         self.validate_wall_configurations(root)
+        self.validate_wall_type_descriptions(root)
         self.validate_webui_configurations(root)
         self.validate_service_card_configurations(root)
         self.validate_wdm_config_configurations(root)
