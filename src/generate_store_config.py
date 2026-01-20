@@ -56,19 +56,22 @@ def normalize_identifier(text: str) -> str:
 
 class StoreConfigGenerator:
     """Main class for generating store configurations."""
-    
+
     def __init__(self, mapping_file: str = "config/mappings/store_wall_mapping.json",
                  template_file: str = "config/templates/template.xml",
                  ip_mapping_file: str = "config/mappings/store_ip_mapping.properties",
-                 service_cards_file: str = "config/mappings/service_cards_mapping.json"):
+                 service_cards_file: str = "config/mappings/service_cards_mapping.json",
+                 sftp_endpoint_file: str = "config/mappings/sftp_endpoint_mapping.json"):
         self.mapping_file = mapping_file
         self.template_file = template_file
         self.ip_mapping_file = ip_mapping_file
         self.service_cards_file = service_cards_file
+        self.sftp_endpoint_file = sftp_endpoint_file
         self.store_mapping: Optional[Dict[str, Any]] = None
         self.template_root: Optional[ET.Element] = None
         self.store_ip_mapping: Optional[Dict[str, str]] = None
         self.service_cards_mapping: Optional[Dict[str, Any]] = None
+        self.sftp_endpoint_mapping: Optional[Dict[str, str]] = None
         
     def load_store_mapping(self) -> Dict[str, Any]:
         """Load and validate the store mapping JSON file."""
@@ -175,7 +178,34 @@ class StoreConfigGenerator:
             print(f"⚠️  Warning: Error loading service cards mapping: {e} - service card changes will be skipped")
             self.service_cards_mapping = {"stores": {}}
             return self.service_cards_mapping
-    
+
+    def load_sftp_endpoint_mapping(self) -> Dict[str, str]:
+        """Load the SFTP endpoint mapping JSON file."""
+        try:
+            with open(self.sftp_endpoint_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+
+            if data and 'stores' in data:
+                self.sftp_endpoint_mapping = data['stores']
+                total_stores = len(self.sftp_endpoint_mapping)
+                print(f"✓ Loaded SFTP endpoint mapping: {total_stores} stores from '{self.sftp_endpoint_file}'")
+                return self.sftp_endpoint_mapping
+            else:
+                raise ValueError("Invalid SFTP endpoint mapping structure")
+
+        except FileNotFoundError:
+            print(f"⚠️  Warning: SFTP endpoint file '{self.sftp_endpoint_file}' not found - SFTP endpoint changes will be skipped")
+            self.sftp_endpoint_mapping = {}
+            return self.sftp_endpoint_mapping
+        except json.JSONDecodeError as e:
+            print(f"⚠️  Warning: Invalid JSON in SFTP endpoint file: {e} - SFTP endpoint changes will be skipped")
+            self.sftp_endpoint_mapping = {}
+            return self.sftp_endpoint_mapping
+        except Exception as e:
+            print(f"⚠️  Warning: Error loading SFTP endpoint mapping: {e} - SFTP endpoint changes will be skipped")
+            self.sftp_endpoint_mapping = {}
+            return self.sftp_endpoint_mapping
+
     def load_template(self) -> ET.Element:
         """Load the base structure template XML file."""
         try:
@@ -215,6 +245,10 @@ class StoreConfigGenerator:
         wall_type_descriptions = store_data.get("wall_type_descriptions", {})
 
         for wall_id, ip_address in walls.items():
+            # Skip walls with empty IP addresses
+            if not ip_address or not ip_address.strip():
+                continue
+
             if not self.validate_ip_address(ip_address):
                 raise ValueError(f"Invalid IP address '{ip_address}' for store {store_id}, wall {wall_id}")
 
@@ -348,9 +382,32 @@ class StoreConfigGenerator:
         changes.append(change)
         
         print(f"   Added wdm-config change for store {store_id}: businessUnitId={store_id}")
-        
+
         return changes
-    
+
+    def generate_sftp_endpoint_changes(self, store_id: str) -> List[ET.Element]:
+        """Generate SFTP endpoint changes for POS Server node."""
+        changes: List[ET.Element] = []
+
+        # Load SFTP endpoint mapping if not already loaded
+        if self.sftp_endpoint_mapping is None:
+            self.load_sftp_endpoint_mapping()
+
+        # Check if store has SFTP endpoint mapping
+        if self.sftp_endpoint_mapping and store_id in self.sftp_endpoint_mapping:
+            sftp_endpoint = self.sftp_endpoint_mapping[store_id]
+
+            # Create Legacy-transaction-export-cst change
+            change = ET.Element("change")
+            change.set("file", "Legacy-transaction-export-cst")
+            change.set("url", "cst.addon.legacy.export.host")
+            change.set("value", sftp_endpoint)
+            changes.append(change)
+
+            print(f"   Added SFTP endpoint change for store {store_id}: {sftp_endpoint}")
+
+        return changes
+
     def create_store_structure(self, store_id: str, store_data: Dict[str, Any]) -> ET.Element:
         """Create a complete store structure based on template."""
         # Create a deep copy of the template
@@ -430,9 +487,15 @@ class StoreConfigGenerator:
                             wdm_config_changes = self.generate_wdm_config_changes(store_id)
                             for change in wdm_config_changes:
                                 new_child.append(change)
-                        
+
+                        # Add SFTP endpoint changes to CSE-pos-server-STORE_SE node
+                        if new_child.get("alias") == "CSE-pos-server-STORE_SE":
+                            sftp_changes = self.generate_sftp_endpoint_changes(store_id)
+                            for change in sftp_changes:
+                                new_child.append(change)
+
                         store_node.append(new_child)
-        
+
         return structure
     
     def format_xml(self, element: ET.Element) -> str:
@@ -580,9 +643,15 @@ class StoreConfigGenerator:
                                 wdm_config_changes = self.generate_wdm_config_changes(store_id)
                                 for change in wdm_config_changes:
                                     new_child.append(change)
-                            
+
+                            # Add SFTP endpoint changes to CSE-pos-server-STORE_SE node
+                            if new_child.get("alias") == "CSE-pos-server-STORE_SE":
+                                sftp_changes = self.generate_sftp_endpoint_changes(store_id)
+                                for change in sftp_changes:
+                                    new_child.append(change)
+
                             store_node.append(new_child)
-        
+
         # Generate XML content
         xml_content = '<?xml version="1.0" encoding="UTF-8"?>\n'
         xml_content += self.format_xml(structure)
@@ -651,15 +720,23 @@ Examples:
                        help="Store IP mapping file for web-ui-config (default: config/mappings/store_ip_mapping.properties)")
     parser.add_argument("--service-cards", type=str, default="config/mappings/service_cards_mapping.json",
                        help="Service cards mapping file (default: config/mappings/service_cards_mapping.json)")
-    
+    parser.add_argument("--sftp-endpoint", type=str, default="config/mappings/sftp_endpoint_mapping.json",
+                       help="SFTP endpoint mapping file (default: config/mappings/sftp_endpoint_mapping.json)")
+
     args = parser.parse_args()
-    
+
     if not args.all and not args.store:
         parser.print_help()
         sys.exit(1)
-    
+
     # Initialize generator
-    generator = StoreConfigGenerator(args.mapping, args.template, args.ip_mapping, args.service_cards)
+    generator = StoreConfigGenerator(
+        args.mapping,
+        args.template,
+        args.ip_mapping,
+        args.service_cards,
+        args.sftp_endpoint
+    )
     
     try:
         if args.all:

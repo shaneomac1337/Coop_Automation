@@ -58,7 +58,7 @@ class StoreConfigGUI:
         self.root.columnconfigure(0, weight=1)
         self.root.rowconfigure(0, weight=1)
         main_frame.columnconfigure(0, weight=1)
-        main_frame.rowconfigure(4, weight=1)
+        main_frame.rowconfigure(6, weight=1)
         
         # ===== Title =====
         title_label = ttk.Label(
@@ -134,10 +134,54 @@ class StoreConfigGUI:
             )
             warning_label.grid(row=3, column=0, columnspan=3, pady=5)
             self.convert_btn.config(state="disabled")
-        
+
+        # ===== SFTP Endpoint Conversion Section =====
+        sftp_frame = ttk.LabelFrame(main_frame, text="SFTP Endpoint Conversion", padding="10")
+        sftp_frame.grid(row=3, column=0, sticky=(tk.W, tk.E), pady=(0, 10))
+        sftp_frame.columnconfigure(1, weight=1)
+
+        # SFTP Excel file
+        ttk.Label(sftp_frame, text="Excel File:").grid(row=0, column=0, sticky=tk.W, pady=5)
+        self.sftp_excel_var = tk.StringVar(value="SFTP endpoint_Import 2.0.xlsx")
+        sftp_excel_entry = ttk.Entry(sftp_frame, textvariable=self.sftp_excel_var, width=30)
+        sftp_excel_entry.grid(row=0, column=1, sticky=(tk.W, tk.E), padx=5)
+
+        ttk.Button(
+            sftp_frame,
+            text="Browse...",
+            command=self.browse_sftp_excel_file
+        ).grid(row=0, column=2, padx=5)
+
+        # SFTP JSON output file
+        ttk.Label(sftp_frame, text="JSON Output:").grid(row=1, column=0, sticky=tk.W, pady=5)
+        self.sftp_json_output_var = tk.StringVar(value="config/mappings/sftp_endpoint_mapping.json")
+        sftp_json_entry = ttk.Entry(sftp_frame, textvariable=self.sftp_json_output_var, width=30)
+        sftp_json_entry.grid(row=1, column=1, sticky=(tk.W, tk.E), padx=5)
+
+        # Convert SFTP button
+        sftp_convert_button_frame = ttk.Frame(sftp_frame)
+        sftp_convert_button_frame.grid(row=2, column=0, columnspan=3, pady=10)
+
+        self.convert_sftp_btn = ttk.Button(
+            sftp_convert_button_frame,
+            text="Convert SFTP Endpoints to JSON",
+            command=self.convert_sftp_to_json
+        )
+        self.convert_sftp_btn.pack(side=tk.LEFT, padx=5)
+
+        # Show warning if pandas not available for SFTP
+        if not PANDAS_AVAILABLE:
+            sftp_warning_label = ttk.Label(
+                sftp_frame,
+                text="⚠️ pandas not installed. Install with: pip install pandas openpyxl",
+                foreground="orange"
+            )
+            sftp_warning_label.grid(row=3, column=0, columnspan=3, pady=5)
+            self.convert_sftp_btn.config(state="disabled")
+
         # ===== Store Selection Section =====
         store_frame = ttk.LabelFrame(main_frame, text="Store Selection", padding="10")
-        store_frame.grid(row=3, column=0, sticky=(tk.W, tk.E), pady=(0, 10))
+        store_frame.grid(row=4, column=0, sticky=(tk.W, tk.E), pady=(0, 10))
         store_frame.columnconfigure(0, weight=1)
         
         # Radio buttons for generation mode
@@ -177,7 +221,7 @@ class StoreConfigGUI:
         
         # ===== Action Buttons =====
         button_frame = ttk.Frame(main_frame)
-        button_frame.grid(row=4, column=0, pady=10)
+        button_frame.grid(row=5, column=0, pady=10)
         
         self.generate_btn = ttk.Button(
             button_frame, 
@@ -209,7 +253,7 @@ class StoreConfigGUI:
         
         # ===== Output Log =====
         log_frame = ttk.LabelFrame(main_frame, text="Output Log", padding="10")
-        log_frame.grid(row=5, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), pady=(0, 10))
+        log_frame.grid(row=6, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), pady=(0, 10))
         log_frame.columnconfigure(0, weight=1)
         log_frame.rowconfigure(0, weight=1)
         
@@ -233,12 +277,12 @@ class StoreConfigGUI:
         # ===== Status Bar =====
         self.status_var = tk.StringVar(value="Ready")
         status_bar = ttk.Label(
-            main_frame, 
-            textvariable=self.status_var, 
+            main_frame,
+            textvariable=self.status_var,
             relief=tk.SUNKEN,
             anchor=tk.W
         )
-        status_bar.grid(row=6, column=0, sticky=(tk.W, tk.E))
+        status_bar.grid(row=7, column=0, sticky=(tk.W, tk.E))
         
     def log(self, message: str):
         """Add message to log output."""
@@ -302,7 +346,8 @@ class StoreConfigGUI:
                 mapping_file=self.mapping_var.get(),
                 template_file=self.template_var.get(),
                 ip_mapping_file="config/mappings/store_ip_mapping.properties",
-                service_cards_file="config/mappings/service_cards_mapping.json"
+                service_cards_file="config/mappings/service_cards_mapping.json",
+                sftp_endpoint_file="config/mappings/sftp_endpoint_mapping.json"
             )
             
             output_dir = self.output_var.get()
@@ -574,6 +619,133 @@ class StoreConfigGUI:
         finally:
             # Re-enable button
             self.convert_btn.config(state="normal")
+
+    def browse_sftp_excel_file(self):
+        """Browse for SFTP endpoint Excel file."""
+        filename = filedialog.askopenfilename(
+            title="Select SFTP Endpoint Excel File",
+            filetypes=[
+                ("Excel files", "*.xlsx *.xls"),
+                ("All files", "*.*")
+            ],
+            initialdir="."
+        )
+        if filename:
+            self.sftp_excel_var.set(filename)
+            self.log(f"Selected SFTP Excel file: {filename}")
+
+    def convert_sftp_to_json(self):
+        """Convert SFTP endpoint Excel file to JSON."""
+        if not PANDAS_AVAILABLE:
+            messagebox.showerror(
+                "Error",
+                "pandas library is not installed.\n\n"
+                "Please install it with:\n"
+                "pip install pandas openpyxl"
+            )
+            return
+
+        # Disable button during conversion
+        self.convert_sftp_btn.config(state="disabled")
+
+        # Run in thread
+        thread = threading.Thread(target=self._convert_sftp_thread)
+        thread.daemon = True
+        thread.start()
+
+    def _convert_sftp_thread(self):
+        """Thread worker for SFTP endpoint Excel to JSON conversion."""
+        try:
+            self.clear_log()
+            self.log("Starting SFTP endpoint Excel to JSON conversion...")
+            self.set_status("Converting...")
+
+            excel_file = self.sftp_excel_var.get()
+            output_file = self.sftp_json_output_var.get()
+
+            # Check if Excel file exists
+            if not Path(excel_file).exists():
+                self.log(f"Error: Excel file not found: {excel_file}")
+                self.set_status("Conversion failed")
+                messagebox.showerror("Error", f"Excel file not found:\n{excel_file}")
+                return
+
+            self.log(f"Reading Excel file: {excel_file}")
+
+            # Read the Excel file
+            df = pd.read_excel(excel_file)
+
+            # Build stores dict from Site ID and SFTP endpoint columns
+            stores_dict = {}
+
+            for _, row in df.iterrows():
+                site_id = str(int(row['Site ID'])) if pd.notna(row['Site ID']) else None
+                sftp_endpoint = str(row['SFTP endpoint']).strip() if pd.notna(row['SFTP endpoint']) else None
+
+                if site_id and sftp_endpoint:
+                    stores_dict[site_id] = sftp_endpoint
+
+            # Create the JSON structure
+            sftp_endpoint_data = {
+                "metadata": {
+                    "description": "Store to SFTP endpoint mapping for POS Server configuration",
+                    "version": "1.0",
+                    "source": excel_file,
+                    "total_stores": len(stores_dict)
+                },
+                "stores": {}
+            }
+
+            # Add each store's SFTP endpoint (sorted by store ID)
+            for store_id in sorted(stores_dict.keys(), key=int):
+                sftp_endpoint_data["stores"][store_id] = stores_dict[store_id]
+
+            # Save to JSON file
+            with open(output_file, 'w', encoding='utf-8') as f:
+                json.dump(sftp_endpoint_data, f, indent=2, ensure_ascii=False)
+
+            self.log(f"\nConversion completed successfully!")
+            self.log(f"   Output file: {output_file}")
+            self.log(f"\nSummary:")
+            self.log(f"   Total stores: {len(stores_dict)}")
+
+            # Show first 5 entries
+            sample_stores = list(stores_dict.items())[:5]
+            self.log(f"\n   First 5 entries:")
+            for store_id, endpoint in sample_stores:
+                self.log(f"      Store {store_id}: {endpoint}")
+
+            self.set_status("Conversion completed successfully!")
+            messagebox.showinfo(
+                "Success",
+                f"SFTP endpoint file converted successfully!\n\n"
+                f"Stores: {len(stores_dict)}\n\n"
+                f"Output: {output_file}"
+            )
+
+        except FileNotFoundError:
+            self.log(f"\nError: Excel file not found: {excel_file}")
+            self.set_status("Conversion failed")
+            messagebox.showerror("Error", f"Excel file not found:\n{excel_file}")
+
+        except KeyError as e:
+            self.log(f"\nError: Missing required column in Excel file: {e}")
+            self.log("   Expected columns: 'Site ID', 'SFTP endpoint'")
+            self.set_status("Conversion failed")
+            messagebox.showerror(
+                "Error",
+                f"Missing required column in Excel file: {e}\n\n"
+                "Expected columns: 'Site ID', 'SFTP endpoint'"
+            )
+
+        except Exception as e:
+            self.log(f"\nError: {e}")
+            self.set_status("Conversion failed")
+            messagebox.showerror("Error", f"Conversion failed:\n{e}")
+
+        finally:
+            # Re-enable button
+            self.convert_sftp_btn.config(state="normal")
 
 
 def main():

@@ -243,7 +243,29 @@ class ConfigValidator:
                 self.warnings.append(f"Unexpected wdm-config URL: {url}")
         
         return len(self.errors) == 0
-    
+
+    def validate_sftp_endpoint_configurations(self, root: ET.Element) -> bool:
+        """Validate SFTP endpoint changes in the POS Server node."""
+        sftp_changes = root.findall(".//change[@file='Legacy-transaction-export-cst']")
+
+        if not sftp_changes:
+            # SFTP endpoint configuration is optional, so just note it
+            return True
+
+        for change in sftp_changes:
+            url = change.get("url", "")
+            value = change.get("value", "")
+
+            # Check if it's the expected SFTP endpoint URL
+            if url == "cst.addon.legacy.export.host":
+                # Validate IP address format
+                if not self.validate_ip_address(value):
+                    self.errors.append(f"Invalid SFTP endpoint IP address: {value}")
+            else:
+                self.warnings.append(f"Unexpected Legacy-transaction-export-cst URL: {url}")
+
+        return len(self.errors) == 0
+
     def validate_store_node(self, root: ET.Element) -> bool:
         """Validate store node configuration."""
         store_nodes = root.findall(".//node[@alias='GKR-Store']")
@@ -321,6 +343,7 @@ class ConfigValidator:
         self.validate_webui_configurations(root)
         self.validate_service_card_configurations(root)
         self.validate_wdm_config_configurations(root)
+        self.validate_sftp_endpoint_configurations(root)
         
         is_valid = len(self.errors) == 0
         
