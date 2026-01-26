@@ -23,7 +23,9 @@
     <nodes>
         <node alias="GKR-Store" country="SE" name="Östra - 1828 Stora Coop Spånga" parent-node-ident="ENTERPRISE.TENANT.SWEDEN" rsid="1828" unique-name="ENTERPRISE.TENANT.SWEDEN.OSTRA_-_1828_STORA_COOP_SPANGA">
             <node alias="CSE-sdc-store_SE" country="SE" name="SDC Store" unique-name="1828.SDC_STORE"/>
-            <node alias="CSE-pos-server-STORE_SE" country="SE" name="POS Server Store" unique-name="1828.POS_SERVER_STORE"/>
+            <node alias="CSE-pos-server-STORE_SE" country="SE" name="POS Server Store" unique-name="1828.POS_SERVER_STORE">
+                <change file="Legacy-transaction-export-cst" url="cst.addon.legacy.export.host" value="10.17.145.136"/>
+            </node>
             <node alias="GKR-mwb-store" country="SE" name="MWB Store" unique-name="1828.MWB_STORE"/>
             <node alias="CSE-lps-store" country="SE" name="LPS Store" unique-name="1828.LPS_STORE"/>
             <node alias="CSE-wdm" country="SE" name="WDM" unique-name="1828.WDM">
@@ -49,6 +51,9 @@
                 <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:16" value="9907845"/>
                 <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:17" value="9907846"/>
                 <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:18" value="9907664"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:19" value="9904608"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:20" value="9904500"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:21" value="9904567"/>
                 <change file="wdm-config.properties" url="remote-services.businessUnitId" value="1828"/>
             </node>
             <node alias="GKR-Customer-Profile-Service-store" country="SE" name="CPS Store" unique-name="1828.CPS_STORE"/>

@@ -23,17 +23,15 @@
     <nodes>
         <node alias="GKR-Store" country="SE" name="Östra - 1038 Coop Hammarby Sjöstad" parent-node-ident="ENTERPRISE.TENANT.SWEDEN" rsid="1038" unique-name="ENTERPRISE.TENANT.SWEDEN.OSTRA_-_1038_COOP_HAMMARBY_SJOSTAD">
             <node alias="CSE-sdc-store_SE" country="SE" name="SDC Store" unique-name="1038.SDC_STORE"/>
-            <node alias="CSE-pos-server-STORE_SE" country="SE" name="POS Server Store" unique-name="1038.POS_SERVER_STORE"/>
+            <node alias="CSE-pos-server-STORE_SE" country="SE" name="POS Server Store" unique-name="1038.POS_SERVER_STORE">
+                <change file="Legacy-transaction-export-cst" url="cst.addon.legacy.export.host" value="10.17.203.49"/>
+            </node>
             <node alias="GKR-mwb-store" country="SE" name="MWB Store" unique-name="1038.MWB_STORE"/>
             <node alias="CSE-lps-store" country="SE" name="LPS Store" unique-name="1038.LPS_STORE"/>
             <node alias="CSE-wdm" country="SE" name="WDM" unique-name="1038.WDM">
                 <change file="wall-config.xml" url="wall-config.walls.1.clientId" value="10.31.99.32"/>
                 <change file="wall-config.xml" url="wall-config.walls.100.clientId" value="10.31.99.31"/>
                 <change file="web-ui-config.xml" url="webUiConfig.system.serverAddress" value="http://10.31.99.32:8080/app-wdm"/>
-                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card" value="9903215"/>
-                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:2" value="9903183"/>
-                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:3" value="9903292"/>
-                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:4" value="9903184"/>
                 <change file="wdm-config.properties" url="remote-services.businessUnitId" value="1038"/>
             </node>
             <node alias="GKR-Customer-Profile-Service-store" country="SE" name="CPS Store" unique-name="1038.CPS_STORE"/>

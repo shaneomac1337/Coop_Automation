@@ -345,7 +345,6 @@ class StoreConfigGUI:
             generator = StoreConfigGenerator(
                 mapping_file=self.mapping_var.get(),
                 template_file=self.template_var.get(),
-                ip_mapping_file="config/mappings/store_ip_mapping.properties",
                 service_cards_file="config/mappings/service_cards_mapping.json",
                 sftp_endpoint_file="config/mappings/sftp_endpoint_mapping.json"
             )

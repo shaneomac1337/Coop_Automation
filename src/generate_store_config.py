@@ -59,17 +59,14 @@ class StoreConfigGenerator:
 
     def __init__(self, mapping_file: str = "config/mappings/store_wall_mapping.json",
                  template_file: str = "config/templates/template.xml",
-                 ip_mapping_file: str = "config/mappings/store_ip_mapping.properties",
                  service_cards_file: str = "config/mappings/service_cards_mapping.json",
                  sftp_endpoint_file: str = "config/mappings/sftp_endpoint_mapping.json"):
         self.mapping_file = mapping_file
         self.template_file = template_file
-        self.ip_mapping_file = ip_mapping_file
         self.service_cards_file = service_cards_file
         self.sftp_endpoint_file = sftp_endpoint_file
         self.store_mapping: Optional[Dict[str, Any]] = None
         self.template_root: Optional[ET.Element] = None
-        self.store_ip_mapping: Optional[Dict[str, str]] = None
         self.service_cards_mapping: Optional[Dict[str, Any]] = None
         self.sftp_endpoint_mapping: Optional[Dict[str, str]] = None
         
@@ -108,49 +105,6 @@ class StoreConfigGenerator:
         except Exception as e:
             print(f"❌ Error loading mapping: {e}")
             sys.exit(1)
-    
-    def load_store_ip_mapping(self) -> Dict[str, str]:
-        """Load the store IP mapping properties file."""
-        try:
-            store_ip_mapping = {}
-            
-            with open(self.ip_mapping_file, 'r', encoding='utf-8') as f:
-                for line_num, line in enumerate(f, 1):
-                    line = line.strip()
-                    
-                    # Skip empty lines and comments
-                    if not line or line.startswith('#') or line.startswith('!'):
-                        continue
-                    
-                    # Parse store_id:ip_address format
-                    if ':' in line:
-                        parts = line.split(':', 1)
-                        if len(parts) == 2:
-                            store_id = parts[0].strip()
-                            ip_address = parts[1].strip()
-                            
-                            # Validate IP address
-                            if self.validate_ip_address(ip_address):
-                                store_ip_mapping[store_id] = ip_address
-                            else:
-                                print(f"⚠️  Warning: Invalid IP address '{ip_address}' for store {store_id} on line {line_num}")
-                        else:
-                            print(f"⚠️  Warning: Invalid format on line {line_num}: {line}")
-                    else:
-                        print(f"⚠️  Warning: Invalid format on line {line_num}: {line}")
-            
-            self.store_ip_mapping = store_ip_mapping
-            print(f"✓ Loaded IP mapping for {len(store_ip_mapping)} stores from '{self.ip_mapping_file}'")
-            return store_ip_mapping
-            
-        except FileNotFoundError:
-            print(f"⚠️  Warning: IP mapping file '{self.ip_mapping_file}' not found - web-ui-config changes will be skipped")
-            self.store_ip_mapping = {}
-            return {}
-        except Exception as e:
-            print(f"⚠️  Warning: Error loading IP mapping: {e} - web-ui-config changes will be skipped")
-            self.store_ip_mapping = {}
-            return {}
     
     def load_service_cards_mapping(self) -> Dict[str, Any]:
         """Load the service cards mapping JSON file."""
@@ -314,7 +268,7 @@ class StoreConfigGenerator:
         return changes
 
     def generate_webui_changes(self, store_id: str, store_data: Dict[str, Any]) -> List[ET.Element]:
-        """Generate web-ui-config changes for a store based on IP mapping."""
+        """Generate web-ui-config changes for a store using wall 1 IP address."""
         if store_data.get("skip_wdm", False) or store_data.get("skip_webui", False):
             reason = "skip_wdm set" if store_data.get("skip_wdm", False) else "skip_webui set"
             print(f"   Skipping web-ui-config change for store {store_id} ({reason})")
@@ -322,14 +276,11 @@ class StoreConfigGenerator:
 
         changes: List[ET.Element] = []
 
-        # Load IP mapping if not already loaded
-        if self.store_ip_mapping is None:
-            self.load_store_ip_mapping()
+        # Use wall 1 IP address for web-UI server
+        walls = store_data.get("walls", {})
+        ip_address = walls.get("1")
 
-        # Check if store has IP mapping
-        if self.store_ip_mapping and store_id in self.store_ip_mapping:
-            ip_address = self.store_ip_mapping[store_id]
-
+        if ip_address and ip_address.strip():
             # Create web-ui-config change
             change = ET.Element("change")
             change.set("file", "web-ui-config.xml")
@@ -716,8 +667,6 @@ Examples:
     parser.add_argument("--template", type=str,
                        default="config/templates/template.xml",
                        help="Template file (default: config/templates/template.xml)")
-    parser.add_argument("--ip-mapping", type=str, default="config/mappings/store_ip_mapping.properties",
-                       help="Store IP mapping file for web-ui-config (default: config/mappings/store_ip_mapping.properties)")
     parser.add_argument("--service-cards", type=str, default="config/mappings/service_cards_mapping.json",
                        help="Service cards mapping file (default: config/mappings/service_cards_mapping.json)")
     parser.add_argument("--sftp-endpoint", type=str, default="config/mappings/sftp_endpoint_mapping.json",
@@ -733,7 +682,6 @@ Examples:
     generator = StoreConfigGenerator(
         args.mapping,
         args.template,
-        args.ip_mapping,
         args.service_cards,
         args.sftp_endpoint
     )

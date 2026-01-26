@@ -21,12 +21,17 @@
     </time-regimes>
     <central-is/>
     <nodes>
-        <node alias="GKR-Store" country="SE" name="Lund" parent-node-ident="ENTERPRISE.TENANT.SWEDEN" rsid="1681" unique-name="ENTERPRISE.TENANT.SWEDEN.LUND">
+        <node alias="GKR-Store" country="SE" name="Syd - 1681 Stora Coop Lund" parent-node-ident="ENTERPRISE.TENANT.SWEDEN" rsid="1681" unique-name="ENTERPRISE.TENANT.SWEDEN.SYD_-_1681_STORA_COOP_LUND">
             <node alias="CSE-sdc-store_SE" country="SE" name="SDC Store" unique-name="1681.SDC_STORE"/>
-            <node alias="CSE-pos-server-STORE_SE" country="SE" name="POS Server Store" unique-name="1681.POS_SERVER_STORE"/>
+            <node alias="CSE-pos-server-STORE_SE" country="SE" name="POS Server Store" unique-name="1681.POS_SERVER_STORE">
+                <change file="Legacy-transaction-export-cst" url="cst.addon.legacy.export.host" value="10.17.145.84"/>
+            </node>
             <node alias="GKR-mwb-store" country="SE" name="MWB Store" unique-name="1681.MWB_STORE"/>
             <node alias="CSE-lps-store" country="SE" name="LPS Store" unique-name="1681.LPS_STORE"/>
             <node alias="CSE-wdm" country="SE" name="WDM" unique-name="1681.WDM">
+                <change file="wall-config.xml" url="wall-config.walls.1.clientId" value="10.20.91.32"/>
+                <change file="wall-config.xml" url="wall-config.walls.2.clientId" value="10.30.91.31"/>
+                <change file="wall-config.xml" url="wall-config.walls.100.clientId" value="10.30.91.31"/>
                 <change file="service-cards.xml" url="service-cards-config.service-cards.service-card" value="9900890"/>
                 <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:2" value="9902012"/>
                 <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:3" value="9903727"/>
@@ -71,6 +76,9 @@
                 <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:42" value="9907562"/>
                 <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:43" value="9907576"/>
                 <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:44" value="9909304"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:45" value="9904608"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:46" value="9904500"/>
+                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:47" value="9904567"/>
                 <change file="wdm-config.properties" url="remote-services.businessUnitId" value="1681"/>
             </node>
             <node alias="GKR-Customer-Profile-Service-store" country="SE" name="CPS Store" unique-name="1681.CPS_STORE"/>

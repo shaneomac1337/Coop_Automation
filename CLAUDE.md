@@ -66,7 +66,6 @@ python scripts/build_exe.py
 
 **src/generate_store_config.py**: Main configuration generator. Processes JSON mappings and creates XML structure files. Key class is `StoreConfigGenerator` with methods:
 - `load_store_mapping()`: Loads store_wall_mapping.json, validates mandatory walls, and parses wall types metadata
-- `load_store_ip_mapping()`: Loads store_ip_mapping.properties for web-UI configuration
 - `load_service_cards_mapping()`: Loads service_cards_mapping.json
 - `generate_wall_changes()`: Creates wall-config.xml change elements for clientId and wallType
 - `generate_wall_type_description_changes()`: Creates wall-config.xml change elements for wall type descriptions
@@ -86,22 +85,20 @@ python scripts/build_exe.py
 - `metadata`: Contains mandatory_walls list and wall_types_example (just documentation/example, not used by generator)
 - `stores`: Object with store_id as key, containing name, country, parent_node, walls object, optional skip_wdm flag, and optional wall_type_descriptions to enable wall type features per store
 
-**config/mappings/store_ip_mapping.properties**: Simple store-to-server IP mapping for web-UI configuration. Format: `StoreID:IPAddress` (one per line, supports comments with # or !)
-
 **config/mappings/service_cards_mapping.json**: Store-to-service-cards mapping. Structure contains stores object with card arrays and card_count.
 
 **config/templates/template.xml**: Base structure template containing systems, time-regimes, central-is, and nodes sections. Contains placeholder store node with alias "GKR-Store" and child nodes including CSE-wdm where changes are injected.
 
 ### Configuration Flow
 
-1. Store mapping files define stores and their wall/server IP addresses and service cards
+1. Store mapping files define stores and their wall IP addresses and service cards
 2. Generator loads template.xml and all mapping files
 3. For each store, generator creates store node structure from template
 4. Generator finds CSE-wdm child node and injects configuration changes:
    - Wall changes: `wall-config.walls.X.clientId` → IP address
    - Wall type changes: `wall-config.walls.X.wallType` → WALL_TYPE_X (or WALL_TYPE_DISPOSAL for wall 100)
    - Wall type descriptions: `wall-config.wall-types.WALL_TYPE_X.description` → description text
-   - Web-UI changes: `webUiConfig.system.serverAddress` → `http://IP:8080/app-wdm`
+   - Web-UI changes: `webUiConfig.system.serverAddress` → `http://{wall1_ip}:8080/app-wdm` (uses wall 1 IP)
    - Service card changes: `service-cards-config.service-cards.service-card[:N]` → card number
    - WDM config changes: `remote-services.businessUnitId` → store_id
 5. Generator formats XML with proper indentation using minidom
@@ -206,11 +203,10 @@ Stores can have `skip_wdm: true` to skip wall and web-UI configuration (keeps te
 
 ## Adding New Stores
 
-1. Edit `config/mappings/store_wall_mapping.json` to add new store entry with required fields
-2. Optionally add entry to `config/mappings/store_ip_mapping.properties` for web-UI configuration
-3. Optionally add service cards to `config/mappings/service_cards_mapping.json`
-4. Run generator to create configuration files
-5. Validate generated configurations
+1. Edit `config/mappings/store_wall_mapping.json` to add new store entry with required fields (wall 1 IP is used for web-UI server address)
+2. Optionally add service cards to `config/mappings/service_cards_mapping.json`
+3. Run generator to create configuration files
+4. Validate generated configurations
 
 For stores that should keep the template unchanged (no WDM or web UI changes), set `"skip_wdm": true` and omit the walls block.
 

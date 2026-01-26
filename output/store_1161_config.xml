@@ -23,14 +23,14 @@
     <nodes>
         <node alias="GKR-Store" country="SE" name="Östra - 1161 Coop Krokek" parent-node-ident="ENTERPRISE.TENANT.SWEDEN" rsid="1161" unique-name="ENTERPRISE.TENANT.SWEDEN.OSTRA_-_1161_COOP_KROKEK">
             <node alias="CSE-sdc-store_SE" country="SE" name="SDC Store" unique-name="1161.SDC_STORE"/>
-            <node alias="CSE-pos-server-STORE_SE" country="SE" name="POS Server Store" unique-name="1161.POS_SERVER_STORE"/>
+            <node alias="CSE-pos-server-STORE_SE" country="SE" name="POS Server Store" unique-name="1161.POS_SERVER_STORE">
+                <change file="Legacy-transaction-export-cst" url="cst.addon.legacy.export.host" value="10.17.203.154"/>
+            </node>
             <node alias="GKR-mwb-store" country="SE" name="MWB Store" unique-name="1161.MWB_STORE"/>
             <node alias="CSE-lps-store" country="SE" name="LPS Store" unique-name="1161.LPS_STORE"/>
             <node alias="CSE-wdm" country="SE" name="WDM" unique-name="1161.WDM">
                 <change file="wall-config.xml" url="wall-config.walls.1.clientId" value="10.17.197.30"/>
                 <change file="web-ui-config.xml" url="webUiConfig.system.serverAddress" value="http://10.17.197.30:8080/app-wdm"/>
-                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card" value="9904576"/>
-                <change file="service-cards.xml" url="service-cards-config.service-cards.service-card:2" value="9904577"/>
                 <change file="wdm-config.properties" url="remote-services.businessUnitId" value="1161"/>
             </node>
             <node alias="GKR-Customer-Profile-Service-store" country="SE" name="CPS Store" unique-name="1161.CPS_STORE"/>
